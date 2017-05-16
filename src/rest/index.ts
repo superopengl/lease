@@ -1,76 +1,50 @@
-import * as server from "./server";
-var debug = require("debug")("express:server");
-import * as http from "http";
+import * as http from 'http';
+import * as debug from 'debug';
 
-//create http server
-const httpPort = normalizePort(process.env.PORT || 8080);
-const app = server.Server.bootstrap().app;
-app.set("port", httpPort);
-const httpServer = http.createServer(app);
+import App from './App';
 
-//listen on provided ports
-httpServer.listen(httpPort);
+debug('ts-express:server');
 
-//add error handler
-httpServer.on("error", onError);
+const port = normalizePort(process.env.PORT || 4000);
+App.set('port', port);
 
-//start listening on port
-httpServer.on("listening", onListening);
+const server = http.createServer(App);
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
-
-/**
- * Normalize a port into a number, string, or false.
- */
-function normalizePort(val: string|number) {
-  var port = parseInt(<string>val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
+function normalizePort(val: number | string): number | string | boolean {
+	let port: number = (typeof val === 'string') ? parseInt(val, 10) : val;
+	if (isNaN(port)) {
+		return val;
+	} else if (port >= 0) {
+		return port;
+	} else {
+		return false;
+	}
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
-function onError(error: any) {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
-
-  var bind = typeof httpPort === "string"
-    ? "Pipe " + httpPort
-    : "Port " + httpPort;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
-      process.exit(1);
-      break;
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+function onError(error: NodeJS.ErrnoException): void {
+	if (error.syscall !== 'listen') {
+		throw error;
+	}
+	let bind = (typeof port === 'string') ? 'Pipe ' + port : 'Port ' + port;
+	switch (error.code) {
+		case 'EACCES':
+			console.error(`${bind} requires elevated privileges`);
+			process.exit(1);
+			break;
+		case 'EADDRINUSE':
+			console.error(`${bind} is already in use`);
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-function onListening() {
-  var addr = httpServer.address();
-  var bind = typeof addr === "string"
-    ? "pipe " + addr
-    : "port " + addr.port;
-  debug("Listening on " + bind);
+function onListening(): void {
+	let addr = server.address();
+	let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
+	debug(`Listening on ${bind}`);
 }
