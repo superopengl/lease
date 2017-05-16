@@ -1,7 +1,8 @@
 {
   "server": {
-    "baseDir": "web",
+    "baseDir": "dist/src/web",
     "routes": {
+      "/": "public",
       "/node_modules": "node_modules"
     }
   }

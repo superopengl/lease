@@ -1,5 +1,5 @@
-import * as api from "./src/apis";
-import * as dto from "./src/dtos";
+import * as api from "./src/data/apis";
+import * as dto from "./src/data/dtos";
 
 async function main() {
 
