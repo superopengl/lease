@@ -2,9 +2,14 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
-        "noImplicitAny": false,
         "sourceMap": true,
-        "allowJs": false
+        "allowJs": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": [ "es2015", "dom" ],
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true
     },
     "exclude": [
         "node_modules",
