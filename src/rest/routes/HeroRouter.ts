@@ -53,6 +53,5 @@ export class HeroRouter {
 
 // Create the HeroRouter, and export its configured Express.Router
 const heroRoutes = new HeroRouter();
-//heroRoutes.init();
 
 export default heroRoutes.router;
