@@ -2,7 +2,7 @@ import * as mongo from "mongodb";
 import * as uuid from "uuid";
 import * as dto from "./dtos";
 
-const connectionString = process.env.MONGO_DB_CONNECTION_STRING;
+const connectionString = process.env.MECO_MONGODB_CONNECTION_STRING;
 const dbPromise = mongo.MongoClient.connect(connectionString);
 
 export interface IMlogRepo <T> {

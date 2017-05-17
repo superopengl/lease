@@ -4,3 +4,4 @@ node_modules
 ts-node-*
 .vscode
 dist
+.DS_Store

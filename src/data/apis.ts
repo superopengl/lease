@@ -13,7 +13,8 @@ abstract class BaseRestApi<T extends {id?: string}> {
 	async get(id: string): Promise<T> {
 		return await this.repo().getLatest(id);
 	}
-	async update(item: T): Promise<T> {
+	async update(id:string, item: T): Promise<T> {
+		item.id = id;
 		await this.repo().add(item);
 		return item;
 	}
@@ -29,7 +30,8 @@ abstract class BaseRestApi<T extends {id?: string}> {
 	async get(id: string): Promise<dto.Lease> {
 		return await this.repo().getLatest(id);
 	}
-	async update(item: dto.Lease): Promise<dto.Lease> {
+	async update(id:string, item: dto.Lease): Promise<dto.Lease> {
+		item.id = id;
 		await this.repo().add(item);
 		return item;
 	}

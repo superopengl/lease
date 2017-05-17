@@ -5,7 +5,7 @@ import {
 	NextFunction
 } from 'express';
 
-export class HeroRouter {
+export class LeaseRouter {
 	router: Router;
 
 	constructor() {
@@ -41,11 +41,14 @@ export class HeroRouter {
 				});
 		}
 	}
-
+	/**
+	 * Take each handler, and attach to one of the Express.Router's
+	 * endpoints.
+	 */
 	init() {
 		this.router.get('/', this.getAll);
 		this.router.get('/:id', this.getOne);
 	}
 }
 
-export default new HeroRouter().router;
+export default new LeaseRouter().router;
