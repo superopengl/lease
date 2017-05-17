@@ -35,9 +35,9 @@ async function main() {
 
 	const lease = await api.lease.createBy(patientUser);
 	lease.requireBy(doctorUser);
-	await api.lease.update(lease);
+	await api.lease.update("id", lease);
 	lease.acknowledgeBy(patientUser);
-	await api.lease.update(lease);
+	await api.lease.update("id", lease);
 
 	console.log("Done");
 }
