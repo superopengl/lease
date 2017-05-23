@@ -11,7 +11,7 @@
 	<div class="tab-content">
 		<div class="tab-pane active" id="signin" role="tabpanel">
 			<div [hidden]="submitted">
-				<form (ngSubmit)="onSignIn()" #signInForm="ngForm">
+				<form (ngSubmit)="onLogin()" #signInForm="ngForm">
 					<div class="form-group">
 						<label for="name">Name</label>
 						<input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel">
@@ -24,7 +24,7 @@
 						<input type="password" class="form-control" id="password" [(ngModel)]="model.password" name="password">
 					</div>
 					<div class="float-right">
-						<button type="submit" class="btn btn-primary" [disabled]="!signInForm.form.valid">Sign In</button>
+						<button type="submit" class="btn btn-primary" [disabled]="!signInForm.form.valid">Login</button>
 						<button type="button" class="btn" (click)="signInForm.reset()">Reset</button>
 					</div>
 				</form>
@@ -32,13 +32,13 @@
 				</div>
 				<div class="tab-pane" id="signup" role="tabpanel">
 					<div [hidden]="submitted">
-						<form (ngSubmit)="onSignUp()" #signInForm="ngForm">
+						<form (ngSubmit)="onSignUp()" #signUpForm="ngForm">
 							<div class="form-group">
-								<label for="name">Name</label>
-								<input type="text" class="form-control" id="name" required [(ngModel)]="newModel.name" name="name" #name="ngModel">
-								<div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+								<label for="newname">Name</label>
+								<input type="text" class="form-control" id="newname" required [(ngModel)]="newModel.name" name="newname" #name="ngModel">
+								<!--<div [hidden]="newname.valid || newname.pristine" class="alert alert-danger">
 									Name is required
-								</div>
+								</div>-->
 							</div>
 							<div class="form-group">
 								<label for="alterEgo">Password</label>
@@ -52,7 +52,7 @@
 									Confirmation doesn't match.
 								</div>
 							<div class="float-right">
-								<button type="submit" class="btn btn-success" [disabled]="!signInForm.form.valid">Sign Up</button>
+								<button type="submit" class="btn btn-success" [disabled]="!signUpForm.form.valid">Sign Up</button>
 								<button type="button" class="btn" (click)="signInForm.reset()">Reset</button>
 							</div>
 						</form>

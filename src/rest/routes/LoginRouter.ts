@@ -32,16 +32,13 @@ export class LoginRouter {
 
 	public login(req: Request, res: Response, next: NextFunction) {
 		let user: User = req.body;
-		api.user.create(user)
+		api.user.find(user.name, user.password)
 		.then(id => {
 			res.status(200).send(id);
 		})
 		.catch(err => {
 			res.status(404)
-				.send({
-					message: 'No hero found with the given id.',
-					status: res.status
-				});
+				.send(err);
 		});
 	}
 
@@ -62,8 +59,8 @@ export class LoginRouter {
 	}
 
 	init() {
-		this.router.get('/', this.login);
-		this.router.post('/:id', this.updateOne);
+		this.router.post('/', this.login);
+		//this.router.post('/:id', this.updateOne);
 	}
 }
 

@@ -10,7 +10,7 @@ export interface IMlogRepo <T> {
 	getAll(id: string): Promise < T[] > ;
 	getAllDuring(id: string, start: Date, end?: Date): Promise<T[]>;
 	add(item: T): Promise<string>;
-	query(query: any): Promise < T[] > ;
+	query(query: any, limit?: number): Promise < T[] > ;
 }
 
 export class MlogRepo<T extends {id?: string}> implements IMlogRepo<T> {

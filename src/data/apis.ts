@@ -50,6 +50,15 @@ abstract class BaseRestApi<T extends {id?: string}> {
 	constructor(){
 		super("users");
 	}
+
+	async find(name: string, password: string): Promise<dto.User> {
+		const query = {name, password};
+		const users = await this.repo().query(query, 1);
+		if(users && users.length) {
+			return users[0];
+		}
+		throw new Error(`Invalid sign in`);
+	}
 }
 
  class PatientApi extends BaseRestApi<dto.Patient> {

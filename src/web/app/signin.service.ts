@@ -7,14 +7,20 @@ import * as dto from "../../../src/data/dtos";
 
 @Injectable()
 export class SignInUpService {
-	private baseUrl: string = "http://localhost:8141/api/v1/user"
+	private loginUrl: string = "http://localhost:8141/api/v1/login";
+	private baseUrl: string = "http://localhost:8141/api/v1/user";
 	constructor(private http: Http){
 
 	}
 
-	async signIn(name: string, password: string): Promise<dto.User> {
-		// this.http.get(baseUrl)
-		return null;
+	async login(name: string, password: string): Promise<dto.User> {
+		const user: dto.User = {
+			name,
+			password
+		};
+		const response = await this.http.post(this.loginUrl, user).toPromise();
+		user.id = response.text();
+		return user;
 	}
 
 	async signUp(name: string, password: string): Promise<dto.User> {

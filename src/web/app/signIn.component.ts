@@ -3,6 +3,7 @@ import {
 	OnInit
 } from '@angular/core';
 import { SignInUpService } from "./signin.service";
+import { CookieService } from 'ng2-cookies';
 //import { HeroService } from './hero.service';
 
 class SignIn {
@@ -18,18 +19,22 @@ class SignUp {
 
 @Component({
 	selector: 'meco-signin',
-	templateUrl: 'signin.html'
-	//providers: [HeroService]
+	templateUrl: 'signin.html',
+	providers: [CookieService]
 })
 export class SignInComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	constructor(private signInUpService: SignInUpService){
+	constructor(private signInUpService: SignInUpService, private cookieService: CookieService){
 	}
 
-	onSignIn() {
-
+	onLogin() {
+		this.signInUpService.login(this.model.name, this.model.password)
+		.then(user => {
+			const userId = user.id;
+			this.cookieService.set("userId", userId);
+		});
 	}
 
 	onSignUp() {
