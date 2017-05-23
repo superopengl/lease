@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
+import * as cors from "cors";
 import LeaseRouter from './routes/LeaseRouter';
 import UserRouter from "./routes/UserRouter";
 // Creates and configures an ExpressJS web server.
@@ -20,6 +21,7 @@ class App {
 	// Configure Express middleware.
 	private middleware(): void {
 		this.express.use(logger('dev'));
+		this.express.use(cors());
 		this.express.use(bodyParser.json());
 		this.express.use(bodyParser.urlencoded({
 			extended: false
