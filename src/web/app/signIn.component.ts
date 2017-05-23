@@ -2,9 +2,19 @@ import {
 	Component,
 	OnInit
 } from '@angular/core';
-//import {Hero} from './hero';
+import { SignInUpService } from "./signin.service";
 //import { HeroService } from './hero.service';
 
+class SignIn {
+	name?: string;
+	password?: string;
+}
+
+class SignUp {
+	name?: string;
+	password?: string;
+	confirm?: string;
+}
 
 @Component({
 	selector: 'meco-signin',
@@ -15,7 +25,7 @@ export class SignInComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	constructor(){
+	constructor(private signInUpService: SignInUpService){
 	}
 
 	onSignIn() {
@@ -23,9 +33,16 @@ export class SignInComponent implements OnInit {
 	}
 
 	onSignUp() {
-
+		this.signInUpService.signUp(this.newModel.name, this.newModel.password)
+		.then(x => {
+			console.log('good');
+		})
+		.catch(e => {
+			console.log(e);
+		});
 	}
 
-	model = {};
+	model: SignIn = {};
+	newModel: SignUp = {};
 }
 
