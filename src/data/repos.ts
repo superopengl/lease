@@ -14,7 +14,7 @@ export interface IMlogRepo <T> {
 }
 
 export class MlogRepo<T extends {id?: string}> implements IMlogRepo<T> {
-	constructor(private collectionName: string) {}
+	constructor(private collectionName: string) { }
 
 	private async getCollection(): Promise < mongo.Collection > {
 		const db = await dbPromise;

@@ -13,6 +13,9 @@ abstract class BaseRestApi<T extends {id?: string}> {
 	async get(id: string): Promise<T> {
 		return await this.repo().getLatest(id);
 	}
+	async gegAll(): Promise<T[]> {
+		return await this.repo().query({});
+	}
 	async update(id:string, item: T): Promise<T> {
 		item.id = id;
 		await this.repo().add(item);

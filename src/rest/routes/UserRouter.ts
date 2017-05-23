@@ -15,6 +15,20 @@ export class UserRouter {
 		this.init();
 	}
 
+	public list(req: Request, res: Response, next: NextFunction) {
+		api.user.gegAll()
+		.then(users => {
+			res.status(200).send(users);
+		})
+		.catch(err => {
+			res.status(404)
+				.send({
+					message: JSON.stringify(err),
+					status: res.status
+				});
+		});
+	}
+
 	public getOne(req: Request, res: Response, next: NextFunction) {
 		let id = req.params.id;
 		api.user.get(id)
@@ -62,6 +76,7 @@ export class UserRouter {
 	}
 
 	init() {
+		this.router.get('/', this.list);
 		this.router.get('/:id', this.getOne);
 		this.router.put('/', this.createOne);
 		this.router.post('/:id', this.updateOne);

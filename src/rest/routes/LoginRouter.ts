@@ -30,7 +30,7 @@ export class LoginRouter {
 		});
 	}
 
-	public createOne(req: Request, res: Response, next: NextFunction) {
+	public login(req: Request, res: Response, next: NextFunction) {
 		let user: User = req.body;
 		api.user.create(user)
 		.then(id => {
@@ -50,7 +50,7 @@ export class LoginRouter {
 		const id = req.params.id;
 		api.user.update(id, user)
 		.then(user => {
-			res.status(200).send(user);
+			res.status(200).cookie("userId", user.id);
 		})
 		.catch(err => {
 			res.status(404)
@@ -62,7 +62,7 @@ export class LoginRouter {
 	}
 
 	init() {
-		this.router.get('/', this.createOne);
+		this.router.get('/', this.login);
 		this.router.post('/:id', this.updateOne);
 	}
 }

@@ -4,6 +4,8 @@ import {
 	Response,
 	NextFunction
 } from 'express';
+import * as api from "../../data/apis";
+import { Lease, LeaseState } from "../../data/dtos";
 
 export class LeaseRouter {
 	router: Router;
@@ -13,12 +15,18 @@ export class LeaseRouter {
 		this.init();
 	}
 
-	public getAll(req: Request, res: Response, next: NextFunction) {
-		res.send([{
-			ok: 1
-		}, {
-			ok: 2
-		}]);
+	public list(req: Request, res: Response, next: NextFunction) {
+		api.lease.gegAll()
+		.then(list => {
+			res.status(200).send(list);
+		})
+		.catch(err => {
+			res.status(404)
+				.send({
+					message: JSON.stringify(err),
+					status: res.status
+				});
+		});
 	}
 
 	public getOne(req: Request, res: Response, next: NextFunction) {
@@ -41,13 +49,23 @@ export class LeaseRouter {
 				});
 		}
 	}
+
+	public createOne(req: Request, res: Response, next: NextFunction) {
+		const body = req.body;
+		const userId = body.userId;
+		api.lease.createBy(userId).then(lease => {
+			res.send(lease);
+		});
+	}
+
 	/**
 	 * Take each handler, and attach to one of the Express.Router's
 	 * endpoints.
 	 */
 	init() {
-		this.router.get('/', this.getAll);
+		this.router.get('/', this.list);
 		this.router.get('/:id', this.getOne);
+		this.router.put('/', this.createOne);
 	}
 }
 
