@@ -14,12 +14,12 @@ export class SignInUpService {
 	}
 
 	async login(name: string, password: string): Promise<dto.User> {
-		const user: dto.User = {
+		let user: dto.User = {
 			name,
 			password
 		};
 		const response = await this.http.post(this.loginUrl, user).toPromise();
-		user.id = response.text();
+		user = response.json();
 		return user;
 	}
 

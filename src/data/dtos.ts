@@ -71,6 +71,14 @@ export class Lease implements ILease {
 	}
 }
 
+export interface MediOrder {
+	id?: string;
+	patientUserId: string;
+	timestamp?: Date;
+	doctorUserId: string;
+	content: string;
+}
+
 export interface User {
 	id?: string;
 	name: string;

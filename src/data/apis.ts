@@ -24,6 +24,9 @@ abstract class BaseRestApi<T extends {id?: string}> {
 	async create(item: T): Promise<string> {
 		return await this.repo().add(item);
 	}
+	async query(query: any, limit: number): Promise<T[]> {
+		return await this.repo().query(query, limit);
+	}
 }
 
  class LeaseApi extends BaseRestApi<dto.Lease> {
@@ -73,7 +76,14 @@ abstract class BaseRestApi<T extends {id?: string}> {
 	}
 }
 
+class MediOrderApi extends BaseRestApi<dto.MediOrder> {
+	constructor(){
+		super("mediorders");
+	}
+}
+
 export const lease = new LeaseApi();
 export const user = new UserApi();
 export const patient = new PatientApi();
 export const doctor = new DoctorApi();
+export const order = new MediOrderApi();

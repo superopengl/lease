@@ -5,7 +5,7 @@ import {
 	NextFunction
 } from 'express';
 import * as api from "../../data/apis";
-import { User } from "../../data/dtos";
+import { User, Patient } from "../../data/dtos";
 
 export class UserRouter {
 	router: Router;
@@ -33,7 +33,11 @@ export class UserRouter {
 		let id = req.params.id;
 		api.user.get(id)
 		.then(user => {
-			res.status(200).send(user);
+			if(user){
+				res.status(200).send(user);
+			}else{
+				res.status(404);
+			}
 		})
 		.catch(err => {
 			res.status(404)
@@ -47,6 +51,21 @@ export class UserRouter {
 	public createOne(req: Request, res: Response, next: NextFunction) {
 		let user: User = req.body;
 		api.user.create(user)
+		.then(id => {
+			res.status(200).send(id);
+		})
+		.catch(err => {
+			res.status(404)
+				.send({
+					message: 'No hero found with the given id.',
+					status: res.status
+				});
+		});
+	}
+
+	public createPatient(req: Request, res: Response, next: NextFunction) {
+		let patient: Patient = req.body;
+		api.patient.create(patient)
 		.then(id => {
 			res.status(200).send(id);
 		})
@@ -80,6 +99,9 @@ export class UserRouter {
 		this.router.get('/:id', this.getOne);
 		this.router.put('/', this.createOne);
 		this.router.post('/:id', this.updateOne);
+		// this.router.put('/patient', this.createPatient);
+		// this.router.put('/doctor', this.createDoctor);
+		
 	}
 }
 

@@ -1,9 +1,11 @@
 import {
 	Component,
-	OnInit
+	OnInit,
+	ApplicationRef
 } from '@angular/core';
 import { SignInUpService } from "./signin.service";
 import { CookieService } from 'ng2-cookies';
+import { ContextService } from "./context.service";
 //import { HeroService } from './hero.service';
 
 class SignIn {
@@ -19,21 +21,24 @@ class SignUp {
 
 @Component({
 	selector: 'meco-signin',
-	templateUrl: 'signin.html',
-	providers: [CookieService]
+	templateUrl: 'signin.html'
 })
 export class SignInComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	constructor(private signInUpService: SignInUpService, private cookieService: CookieService){
+	constructor(private signInUpService: SignInUpService, private contextService: ContextService, private applicationRef: ApplicationRef){
 	}
 
 	onLogin() {
 		this.signInUpService.login(this.model.name, this.model.password)
 		.then(user => {
-			const userId = user.id;
-			this.cookieService.set("userId", userId);
+			this.contextService.user = user;
+			console.log('after>>>', this.contextService.user);
+			this.applicationRef.tick();
+		}).catch(err => {
+			this.contextService.user = null;
+			this.applicationRef.tick();
 		});
 	}
 
