@@ -34,7 +34,6 @@ export class SignInComponent implements OnInit {
 		this.signInUpService.login(this.model.name, this.model.password)
 		.then(user => {
 			this.contextService.user = user;
-			console.log('after>>>', this.contextService.user);
 			this.applicationRef.tick();
 		}).catch(err => {
 			this.contextService.user = null;
