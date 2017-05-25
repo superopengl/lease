@@ -25,8 +25,8 @@ export class ApiRouter {
 	}
 
 	static server500(res: Response): (err: Error) => void {
-		return err => {
-			res.status(500).send(err);
+		return error => {
+			res.status(500).end(error.toString());
 		};
 	}
 
@@ -68,7 +68,7 @@ export class ApiRouter {
 		let item = req.body;
 		ApiRouter.getApi(req).update(item)
 			.then(x => {
-				res.status(200);
+				res.status(200).end('Updated');
 			})
 			.catch(ApiRouter.server500(res));
 	}
@@ -77,7 +77,7 @@ export class ApiRouter {
 		const id = req.params.id;
 		ApiRouter.getApi(req).delete(id)
 			.then(x => {
-				res.status(200);
+				res.status(200).end('Deleted');
 			})
 			.catch(ApiRouter.server500(res));
 	}
