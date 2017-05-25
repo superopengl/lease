@@ -31,8 +31,11 @@ export class ApiRouter {
 	}
 
 	public query(req: Request, res: Response, next: NextFunction) {
-		const query = req.query;
-		ApiRouter.getApi(req).query(query)
+		const queryString = req.query;
+		const query = queryString.query || {};
+		const limit = parseInt(queryString.limit);
+		const sort = queryString.sort;
+		ApiRouter.getApi(req).query(query, limit, sort)
 			.then(items => {
 				res.status(200).send(items);
 			})
@@ -84,7 +87,7 @@ export class ApiRouter {
 		this.router.get('/:type/:id', this.getOne);
 		this.router.put('/:type', this.createOne);
 		this.router.post('/:type', this.updateOne);
-		this.router.delete('/:type', this.deleteOne);
+		this.router.delete('/:type/:id', this.deleteOne);
 		
 	}
 }
