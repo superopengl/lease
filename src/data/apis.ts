@@ -1,6 +1,7 @@
 import * as dto from './dtos';
 import {IMlogRepo, MlogRepo} from "./repos";
-
+import * as mongo from "mongodb";
+import { GenericRepoFactory } from "./genericRepo";
 
 abstract class BaseRestApi<T extends {id?: string}> {
 	private repoInternal: IMlogRepo<T>;
@@ -87,3 +88,8 @@ export const user = new UserApi();
 export const patient = new PatientApi();
 export const doctor = new DoctorApi();
 export const order = new MediOrderApi();
+
+const connectionString = process.env.MECO_MONGODB_CONNECTION_STRING;
+const dbPromise = mongo.MongoClient.connect(connectionString);
+
+export const apiFactory = new GenericRepoFactory(dbPromise);
