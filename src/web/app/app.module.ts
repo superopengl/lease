@@ -8,13 +8,14 @@ import { MainComponent } from "./main.component";
 import { ContextService } from "./context.service";
 import { CookieService } from 'ng2-cookies';
 import { ApiService } from "./api.service";
-
+import { NotificationService } from "./notification.service";
+import { NotificationComponent } from "./notification.component";
 // import {HeroDetailComponent} from './hero-detail.component';
 
 @NgModule({
 	imports: [ BrowserModule, FormsModule, HttpModule ],
-	providers: [SignInUpService, ContextService, CookieService, ApiService],
-	declarations: [ SignInComponent, MainComponent ],
+	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
+	declarations: [ SignInComponent, MainComponent, NotificationComponent ],
 	bootstrap: [ MainComponent ]
 })
 export class AppModule { }

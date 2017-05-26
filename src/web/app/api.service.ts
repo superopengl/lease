@@ -40,9 +40,10 @@ export class ApiService {
 export interface IRestApi < T > {
 	list(limit ? : number, sort ? : any): Promise < T[] > ;
 	get(id: string): Promise < T > ;
+	findOne(query: any, sort?: any): Promise<T>;
 	query(query: any, limit ? : number, sort ? : any): Promise < T[] > ;
-	create(item: any): Promise < string > ;
-	update(item: any): Promise < T > ;
+	create(item: T): Promise < string > ;
+	update(item: T): Promise < T > ;
 	delete(id: string): Promise < void > ;
 }
 
@@ -55,7 +56,8 @@ class RestApi < T > implements IRestApi < T > {
 	private objectToQueryString(query: any): string {
 		const builder = new URLSearchParams();
 		for (let key in query) {
-			builder.set(key, query[key]);
+			const value = JSON.stringify(query[key]);
+			builder.set(key, value);
 		}
 		return builder.toString();
 	}
@@ -82,6 +84,14 @@ class RestApi < T > implements IRestApi < T > {
 		return <T > item;
 	}
 
+	async findOne(query: any, sort?: any): Promise<T> {
+		const result = await this.query(query, 1, sort);
+		if(result && result.length === 1){
+			return result[0];
+		}
+		throw new Error('Cannot find object');
+	}
+
 	async query(query: any, limit ? : number, sort ? : any): Promise < T[] > {
 		const queryObject = {
 			query,
@@ -96,13 +106,13 @@ class RestApi < T > implements IRestApi < T > {
 		return <T[] > list;
 	}
 
-	async create(item: any): Promise < string > {
+	async create(item: T): Promise < string > {
 		const response = await this.http.put(this.baseUrl, item).toPromise();
 		this.AssertResponse(response, 201);
 		return response.text(); // id
 	}
 
-	async update(item: any): Promise < T > {
+	async update(item: T): Promise < T > {
 		const response = await this.http.post(this.baseUrl, item).toPromise();
 		this.AssertResponse(response);
 		return item;

@@ -35,7 +35,7 @@ export class ApiRouter {
 	public async query(req: Request, res: Response, next: NextFunction) {
 		try {
 			const queryString = req.query;
-			const query = queryString.query || {};
+			const query = JSON.parse(queryString.query);
 			const limit = parseInt(queryString.limit);
 			const sort = queryString.sort;
 			const items = await ApiRouter.getApi(req).query(query, limit, sort);
