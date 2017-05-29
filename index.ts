@@ -18,7 +18,8 @@ async function main() {
 	const patient: dto.Patient = {
 		user_id: patientUser.id,
 		bio_info: {
-			name: "Tong X",
+			first_name: "Tong X",
+			last_name: "X",
 			dob: new Date(1960, 11, 4),
 			gender: "male",
 			race: "asian",

@@ -71,7 +71,7 @@ export class Lease implements ILease {
 	}
 }
 
-export interface MediOrder {
+export class MediOrder {
 	id?: string;
 	patientUserId: string;
 	timestamp?: Date;
@@ -79,14 +79,14 @@ export interface MediOrder {
 	content: string;
 }
 
-export interface User {
+export class User {
 	id?: string;
 	name: string;
 	password: string;
 	culture?: string;
 }
 
-export interface Patient {
+export class Patient {
 	id?: string;
 	user_id: string;
 	bio_info: BioLog;
@@ -97,7 +97,7 @@ export interface Patient {
 	familyHistory?: FamilyHistoryLog[];
 }
 
-export interface Doctor {
+export class Doctor {
 	id?: string;
 	user_id: string;
 	bio_info?: BioLog;
@@ -119,7 +119,7 @@ export enum BloodType {
 	"AB-"
 }
 
-export interface ConditionLog {
+export class ConditionLog {
 	name: string;
 	status: string;
 	start_at: Date;
@@ -128,7 +128,7 @@ export interface ConditionLog {
 	note: string;
 }
 
-export interface ContactLog {
+export class ContactLog {
 	name: string;
 	relationship: string;
 	email: string;
@@ -136,7 +136,7 @@ export interface ContactLog {
 	address: string;
 }
 
-export interface FamilyHistoryLog {
+export class FamilyHistoryLog {
 	relationship: string;
 	relative_name: string;
 	gender: string;
@@ -150,7 +150,7 @@ export interface FamilyHistoryLog {
 	note: string;
 }
 
-export interface MeasurementLog {
+export class MeasurementLog {
 	name: string;
 	context: string;
 	type: string;
@@ -160,22 +160,24 @@ export interface MeasurementLog {
 
 }
 
-export interface MedicineLog {
+export class MedicineLog {
 	name: string;
 	dose: string;
 	from_date: Date;
 	to_date?: Date;
 }
 
-export interface AllergyLog {
+export class AllergyLog {
 	type: string;
 	description: string;
 	reaction: string;
 	found_at: Date;
 }
 
-export interface BioLog {
-	name: string;
+export class BioLog {
+	first_name: string;
+	middle_name?: string;
+	last_name: string;
 	dob: Date;
 	gender: string;
 	race: string;

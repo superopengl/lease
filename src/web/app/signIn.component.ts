@@ -4,23 +4,18 @@ import {
 	ApplicationRef
 } from '@angular/core';
 import {
-	SignInUpService
-} from "./signin.service";
-import {
-	CookieService
-} from 'ng2-cookies';
-import {
 	ContextService
 } from "./context.service";
 import {
 	ApiService
 } from "./api.service";
 import {
-	User
+	User, BioLog
 } from "../../data/dtos";
 import {
 	NotificationService
 } from "./notification.service";
+import { Router } from '@angular/router';
 
 class SignIn {
 	name ? : string;
@@ -28,9 +23,11 @@ class SignIn {
 }
 
 class SignUp {
-	name ? : string;
-	password ? : string;
-	confirm ? : string;
+	name: string;
+	password : string;
+	confirm : string;
+	role: string;
+	bioInfo: BioLog;
 }
 
 @Component({
@@ -40,7 +37,7 @@ class SignUp {
 export class SignInComponent implements OnInit {
 	ngOnInit(): void {}
 
-	constructor(private notificationService: NotificationService, private contextService: ContextService, private applicationRef: ApplicationRef, private apiService: ApiService) {}
+	constructor(private notificationService: NotificationService, private contextService: ContextService, private applicationRef: ApplicationRef, private apiService: ApiService, private router: Router) {}
 
 	async onLogin() {
 		try {
@@ -51,7 +48,6 @@ export class SignInComponent implements OnInit {
 			const user = await this.apiService.user.findOne(query);
 			this.contextService.context.user = user;
 			this.applicationRef.tick();
-			this.notificationService.info(user);
 		} catch (error) {
 			this.contextService.context.user = null;
 			this.applicationRef.tick();
@@ -65,13 +61,15 @@ export class SignInComponent implements OnInit {
 				name: this.newModel.name,
 				password: this.newModel.password
 			};
-			let id = await this.apiService.user.create(user);
-			this.notificationService.info(id);
+			let userId = await this.apiService.user.create(user);
+			user.id = userId;
+			this.contextService.context.user = user;
+			this.router.navigateByUrl('/role');
 		} catch (error) {
 			this.notificationService.error(error);
 		}
 	}
 
 	model: SignIn = {};
-	newModel: SignUp = {};
+	newModel: SignUp = new SignUp();
 }

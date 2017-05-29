@@ -11,11 +11,11 @@ import { ApiService } from "./api.service";
 import { NotificationService } from "./notification.service";
 import { NotificationComponent } from "./notification.component";
 import { RouterModule, Routes } from "@angular/router";
-// import {HeroDetailComponent} from './hero-detail.component';
+import { RoleSignupComponent } from "./roleSignup.component";
 
 const appRoutes: Routes = [
 	{ path: '', component: SignInComponent },
-
+	{ path: 'role', component: RoleSignupComponent},
 	// otherwise redirect to home
 	{ path: '**', redirectTo: '' }
 ];
@@ -23,7 +23,7 @@ const appRoutes: Routes = [
 @NgModule({
 	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule ],
 	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
-	declarations: [ SignInComponent, MainComponent, NotificationComponent ],
+	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent],
 	bootstrap: [ MainComponent ]
 })
 export class AppModule { }

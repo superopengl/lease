@@ -6,7 +6,7 @@ import {
 	Response,
 	URLSearchParams
 } from '@angular/http';
-import { User } from "../../data/dtos";
+import {MediOrder, Lease,  Patient,   User,    Doctor} from '../../data/dtos';
 
 @Injectable()
 export class ApiService {
@@ -20,19 +20,19 @@ export class ApiService {
 		return this.forType('user');
 	}
 
-	get doctor(): IRestApi<User> {
+	get doctor(): IRestApi<Doctor> {
 		return this.forType('doctor');
 	}
 
-	get patient(): IRestApi<User> {
+	get patient(): IRestApi<Patient> {
 		return this.forType('patient');
 	}
 
-	get mediOrder(): IRestApi<User> {
+	get mediOrder(): IRestApi<MediOrder> {
 		return this.forType('mediOrder');
 	}
 
-	get lease(): IRestApi<User> {
+	get lease(): IRestApi<Lease> {
 		return this.forType('lease');
 	}
 }
