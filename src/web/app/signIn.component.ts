@@ -49,11 +49,11 @@ export class SignInComponent implements OnInit {
 				password: this.model.password
 			};
 			const user = await this.apiService.user.findOne(query);
-			this.contextService.user = user;
+			this.contextService.context.user = user;
 			this.applicationRef.tick();
 			this.notificationService.info(user);
 		} catch (error) {
-			this.contextService.user = null;
+			this.contextService.context.user = null;
 			this.applicationRef.tick();
 			this.notificationService.error(error);
 		}

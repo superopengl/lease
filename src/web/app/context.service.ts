@@ -4,37 +4,36 @@ import {
 import { Http, Response } from '@angular/http';
 import { CookieService } from 'ng2-cookies';
 import { User } from "../../data/dtos";
+import { Subject } from "rxjs/Subject";
+import { Observable } from "rxjs/Observable";
+
+export interface Context {
+	user: User;
+	role: string;
+}
 
 @Injectable()
 export class ContextService {
-	role: string;
-	user: User;
-	private userApiUrl: string = "http://localhost:8141/api/v1/user";
+	private _context: Context = {
+		user: null,
+		role: null
+	}
+	private subject: Subject<Context> = new Subject<Context>();
 
 	constructor(private cookieService: CookieService, private http: Http){
 	}
 
-	async getUser(): Promise<User>{
-		const userId = this.cookieService.get('userId');
-		if(!userId) {
-			this.user = null;
-			return null;
-		}
-		if(!this.user || this.user.id !== userId) {
-			const url = this.userApiUrl + '/' + userId;
-			let response = await this.http.get(url).toPromise();
-			if(response.status === 200) {
-				this.user = response.json();
-			}
-		}
-		return this.user;
+	getContext(): Observable<Context>{
+		return this.subject.asObservable();
 	}
 
-	isPatient(): boolean {
-		return this.role === 'patient';
+	setContext(user: User, role: string): void {
+		this._context.user = user;
+		this._context.role = role;
+		this.subject.next();
 	}
 
-	isDoctor(): boolean {
-		return this.role === 'doctor';
+	get context(): Context {
+		return this._context;
 	}
 }

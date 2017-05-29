@@ -1,6 +1,7 @@
 import {
 	Component,
-	OnInit
+	OnInit,
+	Input
 } from '@angular/core';
 import { ContextService } from "./context.service";
 
@@ -10,27 +11,26 @@ import { ContextService } from "./context.service";
 })
 export class MainComponent implements OnInit {
 	ngOnInit(): void {
-		this.getUser();
 	}
-	roleName: string;
-	userName: string;
+
+	get roleName(): string {
+		return this.contextService.context.role;
+	}
+	get userName(): string{
+		let user = this.contextService.context.user;
+		return user ? user.name : 'Not logged in';
+	}
 	constructor(private contextService: ContextService){
 	}
 	setRole(role:string){
-		this.roleName = role;
-		this.contextService.role = role;
-	}
-	getUser() {
-		let user = this.contextService.user;
-		this.userName = user ? user.name : 'Not logged in';
-		// this.contextService.getUser().then(u => this.userName = u ? u.name : null);
+		this.contextService.context.role = role;
 	}
 
 	isDoctor(): boolean {
-		return this.contextService.isDoctor();
+		return this.contextService.context.role === 'doctor';
 	}
 
 	isPatient(): boolean {
-		return this.contextService.isPatient();
+		return this.contextService.context.role === 'patient';
 	}
 }
