@@ -15,6 +15,7 @@ import {
 import {
 	NotificationService
 } from "./notification.service";
+import { Router } from '@angular/router';
 
 class SignUp {
 	name: string;
@@ -35,11 +36,12 @@ export class RoleSignupComponent implements OnInit {
 		this.doctorModel.user_id = userId;
 	}
 
-	constructor(private notificationService: NotificationService, private contextService: ContextService, private apiService: ApiService) {}
+	constructor(private notificationService: NotificationService, private contextService: ContextService, private apiService: ApiService, private router: Router) {}
 
 	async onSignUpPatient() {
 		try {
 			await this.apiService.patient.create(this.patientModel);
+			this.router.navigateByUrl('/pdashboard');
 		} catch (error) {
 			this.notificationService.error(error);
 		}
@@ -59,7 +61,6 @@ export class RoleSignupComponent implements OnInit {
 			first_name: null,
 			last_name: null,
 			dob: null,
-			race: null,
 			gender: null,
 			blood_type: null
 		}
@@ -70,7 +71,6 @@ export class RoleSignupComponent implements OnInit {
 			first_name: null,
 			last_name: null,
 			dob: null,
-			race: null,
 			gender: null,
 			blood_type: null
 		}

@@ -12,10 +12,11 @@ import { NotificationService } from "./notification.service";
 import { NotificationComponent } from "./notification.component";
 import { RouterModule, Routes } from "@angular/router";
 import { RoleSignupComponent } from "./roleSignup.component";
-
+import { PatientDashboardComponent } from "./pdashboard.component";
 const appRoutes: Routes = [
 	{ path: '', component: SignInComponent },
 	{ path: 'role', component: RoleSignupComponent},
+	{ path: 'pdashboard', component: PatientDashboardComponent},
 	// otherwise redirect to home
 	{ path: '**', redirectTo: '' }
 ];
@@ -23,7 +24,7 @@ const appRoutes: Routes = [
 @NgModule({
 	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule ],
 	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
-	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent],
+	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent, PatientDashboardComponent],
 	bootstrap: [ MainComponent ]
 })
 export class AppModule { }
