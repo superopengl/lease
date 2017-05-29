@@ -180,6 +180,5 @@ export class BioLog {
 	last_name: string;
 	dob: Date;
 	gender: string;
-	race: string;
 	blood_type: string;
 }
