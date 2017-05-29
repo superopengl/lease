@@ -10,10 +10,18 @@ import { CookieService } from 'ng2-cookies';
 import { ApiService } from "./api.service";
 import { NotificationService } from "./notification.service";
 import { NotificationComponent } from "./notification.component";
+import { RouterModule, Routes } from "@angular/router";
 // import {HeroDetailComponent} from './hero-detail.component';
 
+const appRoutes: Routes = [
+	{ path: '', component: SignInComponent },
+
+	// otherwise redirect to home
+	{ path: '**', redirectTo: '' }
+];
+
 @NgModule({
-	imports: [ BrowserModule, FormsModule, HttpModule ],
+	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule ],
 	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
 	declarations: [ SignInComponent, MainComponent, NotificationComponent ],
 	bootstrap: [ MainComponent ]
