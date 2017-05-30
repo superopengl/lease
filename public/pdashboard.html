@@ -1,28 +1,27 @@
 <div class="container">
 	<h2>Patient Dashboad - {{first_name}} {{last_name}}</h2>
-	<qr-code [value]="'All QR Code data goes here!'" [size]="150"></qr-code>
-	
+
 	<div class="float-right">
 		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" (click)="createLease()">
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
 		Share Health Records
 		</button>
 	</div>
 	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Scan to access</h5>
+					<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<qr-code [value]="'All QR Code data goes here!'" [size]="150"></qr-code>
+					<qr-code [value]="" [size]="150"></qr-code>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelLease()">Close</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
