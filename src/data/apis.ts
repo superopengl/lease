@@ -42,12 +42,12 @@ abstract class BaseRestApi<T extends {id?: string}> {
 		await this.repo().add(item);
 		return item;
 	}
-	async createBy(user: dto.User): Promise<dto.Lease> {
-		const leasePeriod = 2 * 60; // In minutes
-		const lease = new dto.Lease(user, leasePeriod);
-		await this.repo().add(lease);
-		return lease;
-	}
+	// async createBy(user: dto.User): Promise<dto.Lease> {
+	// 	const leasePeriod = 2 * 60; // In minutes
+	// 	const lease = new dto.Lease(user, leasePeriod);
+	// 	await this.repo().add(lease);
+	// 	return lease;
+	// }
 }
 
  class UserApi extends BaseRestApi<dto.User> {

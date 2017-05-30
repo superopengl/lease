@@ -36,7 +36,16 @@ export interface Mlog {
 	extend: string;	// With what
 }
 
-export class Lease implements ILease {
+export interface Lease {
+	id?: string;
+	expire_at: Date;
+	state: string;
+	requiredBy: string;
+	acknowledgedBy: string;
+	cancelledBy: string;	
+}
+
+export class Lease2 implements ILease {
 	id: string;
 	expire_at: Date;
 	state: LeaseState;

@@ -3,9 +3,9 @@ import {
 	OnInit
 } from '@angular/core';
 import { ContextService } from "./context.service";
-import { Patient } from "../../data/dtos";
+import { Patient, Lease } from "../../data/dtos";
 import { ApiService } from "./api.service";
-
+import * as moment from "moment";
 @Component({
 	selector: 'meco-pdashboard',
 	templateUrl: 'pdashboard.html'
@@ -21,6 +21,12 @@ export class PatientDashboardComponent implements OnInit {
 	mlogs: any[];
 	patient: Patient;
 	leaseId: string;
+	_acknowledgeUrl: string;
+	_leaseId: string;
+
+	get acknowledgeUrl(){
+		return this._acknowledgeUrl;
+	}
 
 	get first_name() {
 		return this.patient ? this.patient.bio_info.first_name : '';
@@ -30,11 +36,23 @@ export class PatientDashboardComponent implements OnInit {
 	}
 	constructor(private apiService: ApiService, private contextService: ContextService){}
 
-	createLease(): void {
-
+	async createLease() {
+		const lease: Lease = {
+			expire_at: moment().add(2, 'hours').toDate(),
+			state: 'Created',
+			requiredBy: this.contextService.context.user.id,
+			acknowledgedBy: null,
+			cancelledBy: null
+		};
+		const id = await this.apiService.lease.create(lease);
+		this._leaseId = id;
+		this._acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/acknowledge`;
+		const user = this.contextService.context.user;
+		await this.apiService.lease.require(id, user);
 	}
 
-	cancelLease(): void {
-		
+	async cancelLease() {
+		const user = this.contextService.context.user;
+		await this.apiService.lease.cancel(this._leaseId, user);
 	}
 }

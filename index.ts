@@ -33,11 +33,11 @@ async function main() {
 	await api.patient.create(patient);
 	await api.doctor.create(doctor);
 
-	const lease = await api.lease.createBy(patientUser);
-	lease.requireBy(doctorUser);
-	await api.lease.update("id", lease);
-	lease.acknowledgeBy(patientUser);
-	await api.lease.update("id", lease);
+	// const lease = await api.lease.createBy(patientUser);
+	// lease.requireBy(doctorUser);
+	// await api.lease.update("id", lease);
+	// lease.acknowledgeBy(patientUser);
+	// await api.lease.update("id", lease);
 
 	console.log("Done");
 }

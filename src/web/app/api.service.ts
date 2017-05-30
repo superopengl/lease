@@ -7,35 +7,9 @@ import {
 	URLSearchParams
 } from '@angular/http';
 import {MediOrder, Lease,  Patient,   User,    Doctor} from '../../data/dtos';
+import * as moment from "moment";
 
-@Injectable()
-export class ApiService {
-	constructor(private http: Http) {}
-
-	forType<T>(type: string): IRestApi<T> {
-		return new RestApi<T>(type, this.http);
-	}
-
-	get user(): IRestApi<User> {
-		return this.forType('user');
-	}
-
-	get doctor(): IRestApi<Doctor> {
-		return this.forType('doctor');
-	}
-
-	get patient(): IRestApi<Patient> {
-		return this.forType('patient');
-	}
-
-	get mediOrder(): IRestApi<MediOrder> {
-		return this.forType('mediOrder');
-	}
-
-	get lease(): IRestApi<Lease> {
-		return this.forType('lease');
-	}
-}
+const REST_API_BASE_URL: string = "http://localhost:8141/api/v1/";
 
 export interface IRestApi < T > {
 	list(limit ? : number, sort ? : any): Promise < T[] > ;
@@ -48,8 +22,6 @@ export interface IRestApi < T > {
 }
 
 class RestApi < T > implements IRestApi < T > {
-
-	private userApiUrl: string = "http://localhost:8141/api/v1/";
 
 	constructor(private typeName: string, private http: Http) {}
 
@@ -69,7 +41,7 @@ class RestApi < T > implements IRestApi < T > {
 	}
 
 	get baseUrl(): string {
-		return this.userApiUrl + this.typeName;
+		return REST_API_BASE_URL + this.typeName;
 	}
 
 	async list(limit ? : number, sort ? : any): Promise < T[] > {
@@ -122,5 +94,84 @@ class RestApi < T > implements IRestApi < T > {
 		const url = this.baseUrl + '/' + id;
 		const response = await this.http.delete(url).toPromise();
 		this.AssertResponse(response);
+	}
+}
+
+class LeaseApi extends RestApi<Lease> {
+	private async getLease(id: string): Promise<Lease> {
+		const lease = await this.get(id);
+		if(!lease) {
+			throw new Error('Cannot find lease');
+		}
+		if(lease.cancelledBy){
+			throw new Error('The lease has been cancelled');
+		}
+		if(lease.expire_at < moment.utc().toDate()) {
+			throw new Error('The lease has expired');
+		}
+		return lease;
+	}
+
+	async require(leaseId: string, user: User): Promise<Lease>{
+		const lease = await this.getLease(leaseId);
+		if(lease.requiredBy){
+			throw new Error('The lease has been required');	
+		}
+		lease.requiredBy = user.id;
+		return this.update(lease);
+	}
+
+	async acknowledge(leaseId: string, user: User): Promise<Lease>{
+		const lease = await this.getLease(leaseId);
+		if(!lease.requiredBy){
+			throw new Error(`The lease hasn't been required`);	
+		}
+		if(lease.acknowledgedBy){
+			throw new Error('The lease has been acknowledged');	
+		}
+		lease.acknowledgedBy = user.id;
+		return this.update(lease);
+	}
+
+	async cancel(leaseId: string, user: User): Promise<Lease>{
+		const lease = await this.getLease(leaseId);
+		if(lease.cancelledBy){
+			throw new Error('The lease has been cancelled');	
+		}
+		lease.cancelledBy = user.id;
+		return this.update(lease);
+	}
+}
+
+@Injectable()
+export class ApiService {
+	constructor(private http: Http) {}
+
+	forType<T>(type: string): IRestApi<T> {
+		return new RestApi<T>(type, this.http);
+	}
+
+	get restApiBaseUrl():string{
+		return REST_API_BASE_URL;
+	}
+
+	get user(): IRestApi<User> {
+		return this.forType('user');
+	}
+
+	get doctor(): IRestApi<Doctor> {
+		return this.forType('doctor');
+	}
+
+	get patient(): IRestApi<Patient> {
+		return this.forType('patient');
+	}
+
+	get mediOrder(): IRestApi<MediOrder> {
+		return this.forType('mediOrder');
+	}
+
+	get lease(): LeaseApi {
+		return new LeaseApi('lease', this.http);
 	}
 }

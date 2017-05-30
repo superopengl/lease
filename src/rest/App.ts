@@ -44,10 +44,10 @@ class App {
 			});
 		});
 		this.express.use('/', router);
+		this.express.use('/api/v1/lease', LeaseRouter);
 		this.express.use('/api/v1', ApiRouter);
 		this.express.use('/api/v1/user', UserRouter);
 		this.express.use('/api/v1/login', LoginRouter);
-		this.express.use('/api/v1/lease', LeaseRouter);
 		this.express.use('/api/v1/order', MediOrderRouter);
 	}
 

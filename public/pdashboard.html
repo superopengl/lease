@@ -3,7 +3,7 @@
 
 	<div class="float-right">
 		<!-- Button trigger modal -->
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" (click)="createLease()">
 		Share Health Records
 		</button>
 	</div>
@@ -18,7 +18,8 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<qr-code [value]="" [size]="150"></qr-code>
+					<qr-code [value]="acknowledgeUrl" [size]="150" *ngIf="acknowledgeUrl"></qr-code>
+					<p *ngIf="!acknowledgeUrl">{{acknowledgeUrl || 'Loading QR code'}}</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
