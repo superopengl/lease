@@ -30,7 +30,11 @@ export class PatientDashboardComponent implements OnInit {
 	}
 	constructor(private apiService: ApiService, private contextService: ContextService){}
 
-	shareRecords(): void {
+	createLease(): void {
 
+	}
+
+	cancelLease(): void {
+		
 	}
 }

@@ -13,6 +13,8 @@ import { NotificationComponent } from "./notification.component";
 import { RouterModule, Routes } from "@angular/router";
 import { RoleSignupComponent } from "./roleSignup.component";
 import { PatientDashboardComponent } from "./pdashboard.component";
+import { QRCodeModule } from 'angular2-qrcode';
+
 const appRoutes: Routes = [
 	{ path: '', component: SignInComponent },
 	{ path: 'role', component: RoleSignupComponent},
@@ -22,7 +24,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule ],
+	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule, QRCodeModule],
 	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
 	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent, PatientDashboardComponent],
 	bootstrap: [ MainComponent ]

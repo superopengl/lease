@@ -22,7 +22,6 @@ async function main() {
 			last_name: "X",
 			dob: new Date(1960, 11, 4),
 			gender: "male",
-			race: "asian",
 			blood_type: "B+"
 		}
 	};
