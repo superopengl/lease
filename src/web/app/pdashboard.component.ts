@@ -24,22 +24,27 @@ export class PatientDashboardComponent implements OnInit {
 	leaseId: string;
 	_acknowledgeUrl: string;
 	_leaseId: string;
+	_expireAt: Date;
 
 	get acknowledgeUrl(){
 		return this._acknowledgeUrl;
 	}
 
-	get first_name() {
+	get first_name(): string {
 		return this.patient ? this.patient.bio_info.first_name : '';
 	}
-	get last_name() {
+	get last_name(): string {
 		return this.patient ? this.patient.bio_info.last_name : '';
+	}
+	get expire_at(): Date {
+		return this._expireAt;
 	}
 	constructor(private apiService: ApiService, private contextService: ContextService){}
 
 	async createLease() {
+		this._expireAt = moment().add(2, 'hours').toDate();
 		const lease: Lease = {
-			expire_at: moment().add(2, 'hours').toDate(),
+			expire_at: this._expireAt,
 			state: 'Created',
 			requiredBy: this.contextService.context.user.id,
 			acknowledgedBy: null,

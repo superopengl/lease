@@ -22,6 +22,7 @@
 						<qr-code [value]="acknowledgeUrl" size="200" *ngIf="acknowledgeUrl"></qr-code>
 						<p *ngIf="!acknowledgeUrl">{{acknowledgeUrl || 'Loading QR code'}}</p>
 					</div>
+					<p class="text-center">Will expire at <u>{{expire_at | date:'medium'}}</u></p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
