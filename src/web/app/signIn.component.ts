@@ -4,30 +4,36 @@ import {
 	ApplicationRef
 } from '@angular/core';
 import {
+	SignInUpService
+} from "./signin.service";
+import {
+	CookieService
+} from 'ng2-cookies';
+import {
 	ContextService
 } from "./context.service";
 import {
 	ApiService
 } from "./api.service";
 import {
-	User, BioLog
+	User, Patient
 } from "../../data/dtos";
 import {
 	NotificationService
 } from "./notification.service";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 
-class SignIn {
-	name ? : string;
-	password ? : string;
+interface SignIn {
+	name : string;
+	password : string;
+	role: string;
 }
 
-class SignUp {
-	name: string;
-	password : string;
-	confirm : string;
-	role: string;
-	bioInfo: BioLog;
+interface SignUp {
+	name ? : string;
+	password ? : string;
+	confirm ? : string;
+	role?: string;
 }
 
 @Component({
@@ -41,16 +47,18 @@ export class SignInComponent implements OnInit {
 
 	async onLogin() {
 		try {
-			const query = {
-				name: this.model.name,
-				password: this.model.password
-			};
-			const user = await this.apiService.user.findOne(query);
-			this.contextService.context.user = user;
-			this.applicationRef.tick();
+			const result = await this.apiService.raw.post("auth", this.model);
+			this.contextService.context.user = result.user;
+			this.contextService.context.role = this.model.role;
+			this.notificationService.info(result);
+			
+			this.router.navigateByUrl('/pdashboard');
+
+			// this.applicationRef.tick();
 		} catch (error) {
 			this.contextService.context.user = null;
-			this.applicationRef.tick();
+			this.contextService.context.role = null;
+			// this.applicationRef.tick();
 			this.notificationService.error(error);
 		}
 	}
@@ -70,6 +78,10 @@ export class SignInComponent implements OnInit {
 		}
 	}
 
-	model: SignIn = {};
-	newModel: SignUp = new SignUp();
+	model: SignIn = {
+		name: null,
+		password: null,
+		role: null
+	};
+	newModel: SignUp = {};
 }

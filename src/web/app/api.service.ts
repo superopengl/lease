@@ -21,8 +21,14 @@ export interface IRestApi < T > {
 	delete(id: string): Promise < void > ;
 }
 
-class RestApi < T > implements IRestApi < T > {
+export interface IRawRestApi {
+	get(path: string): Promise<any>;
+	post(path: string, body: any): Promise<any>;
+	put(path: string, body: any): Promise<any>;
+	delete(path: string): Promise<any>;
+}
 
+class RestApi < T > implements IRestApi < T > {
 	constructor(private typeName: string, private http: Http) {}
 
 	private objectToQueryString(query: any): string {
@@ -143,6 +149,49 @@ class LeaseApi extends RestApi<Lease> {
 	}
 }
 
+class RawRestApi implements IRawRestApi {
+	constructor(private http: Http) { }
+
+	private getFullUrl(path: string){
+		return /^https?:\/\//i.test(path) ?
+			path :
+			REST_API_BASE_URL + path.replace(/^\/*/, "");
+	}
+
+	async get(path: string): Promise<any> {
+		const url = this.getFullUrl(path);
+		var response = await this.http.get(url).toPromise();
+		if(response.status !== 200) {
+			throw new Error(response.text());
+		}
+		return response.json();
+	}
+	async post(path: string, body: any): Promise<any> {
+		const url = this.getFullUrl(path);
+		var response = await this.http.post(url, body).toPromise();
+		if(response.status !== 200) {
+			throw new Error(response.text());
+		}
+		return response.json();
+	}
+	async put(path: string, body: any): Promise<any> {
+		const url = this.getFullUrl(path);
+		var response = await this.http.put(url, body).toPromise();
+		if(response.status !== 201) {
+			throw new Error(response.text());
+		}
+		return response.json();
+	}
+	async delete(path: string): Promise<any> {
+		const url = this.getFullUrl(path);
+		var response = await this.http.delete(url).toPromise();
+		if(response.status !== 200) {
+			throw new Error(response.text());
+		}
+		return response.json();
+	}
+}
+
 @Injectable()
 export class ApiService {
 	constructor(private http: Http) {}
@@ -173,5 +222,9 @@ export class ApiService {
 
 	get lease(): LeaseApi {
 		return new LeaseApi('lease', this.http);
+	}
+
+	get raw(): IRawRestApi {
+		return new RawRestApi(this.http);
 	}
 }

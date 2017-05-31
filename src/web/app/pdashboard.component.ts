@@ -12,6 +12,7 @@ import * as moment from "moment";
 })
 export class PatientDashboardComponent implements OnInit {
 	ngOnInit(): void {
+		console.log(this.contextService.context);
 		const userId = this.contextService.context.user.id;
 		this.apiService.patient.findOne({user_id: userId})
 			.then(p => {
