@@ -48,11 +48,10 @@ export class PatientDashboardComponent implements OnInit {
 		const id = await this.apiService.lease.create(lease);
 		this._leaseId = id;
 		this._acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/acknowledge`;
-		const user = this.contextService.context.user;
-		await this.apiService.lease.require(id, user);
 	}
 
 	async cancelLease() {
+		this._acknowledgeUrl = null;
 		const user = this.contextService.context.user;
 		await this.apiService.lease.cancel(this._leaseId, user);
 	}
