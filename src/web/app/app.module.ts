@@ -14,19 +14,22 @@ import { RouterModule, Routes } from "@angular/router";
 import { RoleSignupComponent } from "./roleSignup.component";
 import { PatientDashboardComponent } from "./pdashboard.component";
 import { QRCodeModule } from 'angular2-qrcode';
+import { DoctorDashboardComponent } from "./ddashboard.component";
+import { QrScannerModule } from "angular2-qrscanner";
 
 const appRoutes: Routes = [
 	{ path: '', component: SignInComponent },
 	{ path: 'role', component: RoleSignupComponent},
 	{ path: 'pdashboard', component: PatientDashboardComponent},
+	{ path: 'ddashboard', component: DoctorDashboardComponent},
 	// otherwise redirect to home
 	{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({
-	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule, QRCodeModule],
+	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule, QRCodeModule, QrScannerModule],
 	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
-	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent, PatientDashboardComponent],
+	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent, PatientDashboardComponent, DoctorDashboardComponent],
 	bootstrap: [ MainComponent ]
 })
 export class AppModule { }
