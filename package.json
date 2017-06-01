@@ -41,7 +41,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.26",
     "angular-in-memory-web-api": "~0.3.0",
     "angular2-qrcode": "^2.0.1",
-    "angular2-qrscanner": "git+https://github.com/tulkasEldarion/angular2-qrscanner.git",
+    "angular2-qrscanner": "git+https://github.com/tulkasEldarion/angular2-qrscanner.git#a490fa0b767d9e0ab08c9bf997fcd8642603c062",
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
     "core-js": "^2.4.1",
