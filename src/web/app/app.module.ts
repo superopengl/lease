@@ -16,6 +16,7 @@ import { PatientDashboardComponent } from "./pdashboard.component";
 import { QRCodeModule } from 'angular2-qrcode';
 import { DoctorDashboardComponent } from "./ddashboard.component";
 import { QrScannerModule } from "angular2-qrscanner";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
 	{ path: '', component: SignInComponent },
@@ -27,7 +28,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule, QRCodeModule, QrScannerModule],
+	imports: [ RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule, QRCodeModule, QrScannerModule, NgbModule.forRoot()],
 	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
 	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent, PatientDashboardComponent, DoctorDashboardComponent],
 	bootstrap: [ MainComponent ]

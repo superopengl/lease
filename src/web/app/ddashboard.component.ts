@@ -6,6 +6,7 @@ import { ContextService } from "./context.service";
 import { Doctor, Lease } from "../../data/dtos";
 import { ApiService } from "./api.service";
 import * as moment from "moment";
+import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'meco-ddashboard',
@@ -26,33 +27,22 @@ export class DoctorDashboardComponent implements OnInit {
 	acknowledgeUrl: string;
 	_leaseId: string;
 	_expireAt: Date;
+	_modalRef: NgbModalRef;
 
 	get expire_at(): Date {
 		return this._expireAt;
 	}
-	constructor(private apiService: ApiService, private contextService: ContextService){}
+	constructor(private apiService: ApiService, private contextService: ContextService, private modalService: NgbModal){}
 
-	scanning: boolean;
-
-	// async createLease() {
-	// 	this._expireAt = moment().add(2, 'hours').toDate();
-	// 	const lease: Lease = {
-	// 		expire_at: this._expireAt,
-	// 		state: 'Created',
-	// 		requiredBy: this.contextService.context.user.id,
-	// 		acknowledgedBy: null,
-	// 		cancelledBy: null
-	// 	};
-	// 	const id = await this.apiService.lease.create(lease);
-	// 	this._leaseId = id;
-	// 	this._acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/acknowledge`;
-	// }
+	openAquireLeaseModal(content: any) {
+		this.acknowledgeUrl = null;
+		this._modalRef = this.modalService.open(content);
+	}
 
 	decodedOutput(value: string){
-		this.acknowledgeUrl = value;// console.log('>>> debug', JSON.stringify(event));
-		this.scanning = false;
-
-		console.log('acknowledgeUrl', this.acknowledgeUrl);
-		console.log('scanning', this.scanning);
+		this.acknowledgeUrl = value;
+		if(this._modalRef) {
+			this._modalRef.close();
+		}
 	}
 }
