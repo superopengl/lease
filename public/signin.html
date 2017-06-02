@@ -66,5 +66,18 @@
 				</form>
 			</div>
 		</div>
+
+		 <bsf-form [options]='formConfig' [(value)]='data' #regForm>
+			<bsf-before>
+				<h5>New User</h5>
+			</bsf-before>
+			<bsf-after>
+				<button type="button" class="btn btn-primary" (click)='sendForm(regForm.value, regForm.form.valid)'>Register</button>
+				<button type="button" class="btn btn-secondary" (click)='reset()'>Clear</button>
+				<span>{{message}}</span>
+			</bsf-after>
+		</bsf-form>
+		<br>
+		<pre>{{data|json}}</pre>
 	</div>
 </div>

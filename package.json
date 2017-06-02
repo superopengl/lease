@@ -54,11 +54,12 @@
     "moment": "^2.18.1",
     "mongodb": "^2.2.26",
     "morgan": "^1.8.1",
+    "ng-bootstrap-form-generator": "^0.1.1",
     "ng2-cookies": "^1.0.12",
     "rxjs": "5.0.1",
     "systemjs": "0.19.40",
     "uuid": "^3.0.1",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.11"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.3",

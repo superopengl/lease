@@ -5,11 +5,22 @@
 (function (global) {
   System.config({
     defaultJSExtensions: true,
+    //use typescript for compilation
+    transpiler: 'typescript',
+    meta: {
+      typescript: {
+        format: 'global'
+      }
+    },
+    //typescript compiler options
+    typescriptOptions: {
+      emitDecoratorMetadata: true
+    },
     paths: {
       // paths serve as alias
-      'npm:': 'node_modules/'
+      'npm:': 'node_modules/',
+      'unpkg:': 'https://unpkg.com/'
     },
-    // map tells the System loader where to look for things
     map: {
       // our app is within the app folder
       'app': './app',
@@ -33,7 +44,8 @@
       'moment': 'npm:moment/min/moment.min.js',
       'angular2-qrscanner': 'npm:angular2-qrscanner/dist/index.js',
       '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
-      //'ng-bootstrap-form-generator': 'https://unpkg.com/ng-bootstrap-form-generator@0.1.1/src/index.js'
+      'typescript': 'npm:typescript/lib/typescript.js',
+      'ng-bootstrap-form-generator': 'unpkg:ng-bootstrap-form-generator@0.1.1/src/index.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
