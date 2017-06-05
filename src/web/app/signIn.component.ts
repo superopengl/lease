@@ -18,7 +18,7 @@ import {
 	NotificationService
 } from "./notification.service";
 import { Router } from "@angular/router";
-import { BsfControlOptions } from 'ng-bootstrap-form-generator';
+import { BfgControlOptions } from 'ng-bootstrap-form-generator';
 
 interface SignIn {
 	name : string;
@@ -49,6 +49,7 @@ export class SignInComponent implements OnInit {
 			this.contextService.context.role = this.model.role;
 			this.router.navigateByUrl('/pdashboard');
 		} catch (error) {
+			this.message = error.toString();
 			this.contextService.context.user = null;
 			this.contextService.context.role = null;
 			this.notificationService.error(error);
@@ -66,6 +67,7 @@ export class SignInComponent implements OnInit {
 			this.contextService.context.user = user;
 			this.router.navigateByUrl('/role');
 		} catch (error) {
+			this.message = error.toString();
 			this.notificationService.error(error);
 		}
 	}
@@ -77,53 +79,23 @@ export class SignInComponent implements OnInit {
 	};
 	newModel: SignUp = {};
 
-	data = {
-		id: '123',
-		email: 'boby.mobi@example.com',
-		name: 'Mobibob',
-		password: 'AOe30&^@#!c2',
-		howUserFindUs: '2',
-		agreement: true,
-	};
 	message: string = null;
 
-	reset() {
-		this.data = {
-		id: null,
-		email: null,
-		name: null,
-		password: null,
-		howUserFindUs: null,
-		agreement: null,
+	resetLoginForm() {
+		this.model = {
+			name: null,
+			password: null,
+			role: null
 		};
 	}
 
-	sendForm(data: any, valid: boolean) {
-		if (valid) {
-		this.message = 'Registration form sent';
-		} else {
-		this.message = 'Please fill form and fix all errors';
-		}
-	}
-
-	formConfig: BsfControlOptions[] = [
-		{
-			field: 'id',
-			type: 'hidden',
-		},
-		{
-			field: 'email',
-			type: 'email',
-			title: 'Email',
-			helpText: 'We will send confirmation email in order to finish registration',
-			required: true
-		},
+	loginFormConfig: BfgControlOptions[] = [
 		{
 			field: 'name',
 			type: 'text',
 			title: 'User Name',
 			required: true,
-			maxlength: 15
+			maxlength: 20
 		},
 		{
 			field: 'password',
@@ -134,29 +106,17 @@ export class SignInComponent implements OnInit {
 			minlength: 6
 		},
 		{
-			field: 'howUserFindUs',
-			type: 'select',
-			title: 'How did you find us?',
-			helpText: 'You can keep this field empty',
+			field: 'role',
+			type: 'radio-button-group',
+			title: 'Role',
+			required: true,
+			helpText: 'Select a role',
 			select: {
-			emptyText: '-- How did you hear of us? --',
-			options: [
-				{ text: 'Facebook', value: 1 },
-				{ text: 'LinkedIn', value: 2 },
-				{ text: 'Google', value: 3 },
-				{ text: 'Friends', value: 4 },
-			]
+				options: [
+					{ text: 'Patient', value: 'patient' },
+					{ text: 'Doctor', value: 'doctor' }
+				]
 			}
-		},
-		{
-			field: 'agreement',
-			type: 'checkbox',
-			title: 'I accept license agreement',
-			helpTextHtml: 'Read <a href="#license  ">license</a> before accept',
-			requiredTrue: true,
-			validationMessage: {
-			required: 'Please, read and accept agreement'
-			},
 		}
 	];
 }

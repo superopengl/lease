@@ -45,7 +45,7 @@
       'angular2-qrscanner': 'npm:angular2-qrscanner/dist/index.js',
       '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
       'typescript': 'npm:typescript/lib/typescript.js',
-      'ng-bootstrap-form-generator': 'unpkg:ng-bootstrap-form-generator@0.1.1/src/index.js'
+      'ng-bootstrap-form-generator': 'npm:ng-bootstrap-form-generator/index.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {

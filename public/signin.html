@@ -10,33 +10,15 @@
 
 	<div class="tab-content">
 		<div class="tab-pane active" id="signin" role="tabpanel">
-			<div [hidden]="submitted">
-				<form (ngSubmit)="onLogin()" #signInForm="ngForm">
-					<div class="form-group">
-						<label for="name">Name</label>
-						<input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel" placeholder="name">
-						<div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-							Name is required
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="password">Password</label>
-						<input type="password" class="form-control" id="password" [(ngModel)]="model.password" name="password" placeholder="password">
-					</div>
-					<div class="form-group">
-						<label for="role">Role</label>
-						<div class="btn-group" role="group">
-							<button type="button" class="btn" (click)="model.role='patient'" [ngClass]="(model.role==='patient') ? 'btn-primary' : 'btn-secondary'">Patient</button>
-							<button type="button" class="btn" (click)="model.role='doctor'" [ngClass]="(model.role==='doctor') ? 'btn-primary' : 'btn-secondary'">Doctor</button>
-						</div>
-
-					</div>
-					<div class="float-right">
-						<button type="submit" class="btn btn-primary" [disabled]="!signInForm.form.valid">Login</button>
-						<button type="button" class="btn" (click)="signInForm.reset()">Reset</button>
-					</div>
-				</form>
-			</div>
+			<bfg-form [options]='loginFormConfig' [(value)]='model' #regForm>
+				<bfg-before>
+					<h5>User Login</h5>
+				</bfg-before>
+				<bfg-after>
+					<button type="button" class="btn btn-primary" (click)='onLogin()'>Login</button>
+					<button type="button" class="btn btn-secondary" (click)='resetLoginForm()'>Reset</button>
+				</bfg-after>
+			</bfg-form>
 		</div>
 		<div class="tab-pane" id="signup" role="tabpanel">
 			<div [hidden]="submitted">
@@ -66,18 +48,5 @@
 				</form>
 			</div>
 		</div>
-
-		 <bsf-form [options]='formConfig' [(value)]='data' #regForm>
-			<bsf-before>
-				<h5>New User</h5>
-			</bsf-before>
-			<bsf-after>
-				<button type="button" class="btn btn-primary" (click)='sendForm(regForm.value, regForm.form.valid)'>Register</button>
-				<button type="button" class="btn btn-secondary" (click)='reset()'>Clear</button>
-				<span>{{message}}</span>
-			</bsf-after>
-		</bsf-form>
-		<br>
-		<pre>{{data|json}}</pre>
 	</div>
 </div>
