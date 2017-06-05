@@ -21,16 +21,15 @@ import { Router } from "@angular/router";
 import { BfgControlOptions } from 'ng-bootstrap-form-generator';
 
 interface SignIn {
-	name : string;
-	password : string;
+	name: string;
+	password: string;
 	role: string;
 }
 
 interface SignUp {
-	name ? : string;
-	password ? : string;
-	confirm ? : string;
-	role?: string;
+	name: string;
+	password: string;
+	confirm: string;
 }
 
 @Component({
@@ -77,7 +76,11 @@ export class SignInComponent implements OnInit {
 		password: null,
 		role: null
 	};
-	newModel: SignUp = {};
+	newModel: SignUp = {
+		name: null,
+		password: null,
+		confirm: null
+	};
 
 	message: string = null;
 
@@ -117,6 +120,31 @@ export class SignInComponent implements OnInit {
 					{ text: 'Doctor', value: 'doctor' }
 				]
 			}
+		}
+	];
+
+	signInFormConfig: BfgControlOptions[] = [
+		{
+			field: 'name',
+			type: 'text',
+			title: 'User Name',
+			required: true,
+			maxlength: 20
+		},
+		{
+			field: 'password',
+			type: 'password',
+			title: 'Password',
+			helpText: 'Password should be strong',
+			required: true,
+			minlength: 6
+		},
+		{
+			field: 'confirm',
+			type: 'password',
+			title: 'Confirm',
+			required: true,
+			minlength: 6
 		}
 	];
 }
