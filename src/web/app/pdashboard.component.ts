@@ -11,8 +11,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 interface Model {
 	expire_at: Date;
 	acknowledgeUrl: string;
-	await_req: boolean;
-	await_ack: boolean;
 }
 
 @Component({
@@ -38,8 +36,6 @@ export class PatientDashboardComponent implements OnInit {
 	model: Model = {
 		expire_at: null,
 		acknowledgeUrl: null,
-		await_req: false,
-		await_ack: false
 	};
 
 	get first_name(): string {
@@ -62,7 +58,6 @@ export class PatientDashboardComponent implements OnInit {
 		};
 		const id = await this.apiService.lease.create(this._lease);
 		this._lease.id = id;
-		this.model.await_req = true;
 		// this.model.acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/require`;
 		this.model.acknowledgeUrl = id;
 		this._timerPolling = this.startPollingLeaseState();
