@@ -50,6 +50,7 @@ export class RoleSignupComponent implements OnInit {
 	async onSignUpDoctor() {
 		try {
 			await this.apiService.doctor.create(this.doctorModel);
+			this.router.navigateByUrl('/ddashboard');
 		} catch (error) {
 			this.notificationService.error(error);
 		}

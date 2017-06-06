@@ -72,7 +72,7 @@ export class ApiRouter {
 	public async updateOne(req: Request, res: Response, next: NextFunction) {
 		let item = req.body;
 		try {
-			await ApiRouter.getApi(req).update(item)
+			await ApiRouter.getApi(req).update(item);
 
 			res.status(200).end('Updated');
 		} catch (error) {

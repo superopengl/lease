@@ -63,6 +63,7 @@ class GenericRepo implements IGenericRepo {
 		const option: mongo.ReplaceOneOptions = {
 			upsert
 		};
+		delete item['_id'];
 		const result = await collection.updateOne({
 			id: item.id
 		}, item, option);

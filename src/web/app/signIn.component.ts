@@ -45,8 +45,15 @@ export class SignInComponent implements OnInit {
 		try {
 			const result = await this.apiService.raw.post("auth", this.model);
 			this.contextService.context.user = result.user;
-			this.contextService.context.role = this.model.role;
-			this.router.navigateByUrl('/pdashboard');
+			const role = this.model.role;
+			this.contextService.context.role = role;
+			if(role === 'patient') {
+				this.router.navigateByUrl('/pdashboard');
+			}else if (role === 'doctor') {
+				this.router.navigateByUrl('/ddashboard');
+			}else {
+				throw new Error(`Unsupported role '${role}'`);
+			}
 		} catch (error) {
 			this.message = error.toString();
 			this.contextService.context.user = null;
