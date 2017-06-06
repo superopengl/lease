@@ -11,6 +11,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 interface Model {
 	expire_at: Date;
 	acknowledgeUrl: string;
+	await_req: boolean;
+	await_ack: boolean;
 }
 
 @Component({
@@ -28,16 +30,16 @@ export class PatientDashboardComponent implements OnInit {
 	}
 
 	patient: Patient;
-	leaseId: string;
-	_leaseId: string;
-	required: boolean;
 	_modalRef: NgbModalRef;
 	_timerPolling: NodeJS.Timer;
 	_timerExpiring: NodeJS.Timer;
+	_lease: Lease;
 
 	model: Model = {
 		expire_at: null,
-		acknowledgeUrl: null
+		acknowledgeUrl: null,
+		await_req: false,
+		await_ack: false
 	};
 
 	get first_name(): string {
@@ -51,18 +53,32 @@ export class PatientDashboardComponent implements OnInit {
 
 	async createLease() {
 		this.model.expire_at = moment().add(2, 'hours').toDate();
-		const lease: Lease = {
+		this._lease = {
 			expire_at: this.model.expire_at,
 			state: 'Created',
 			requiredBy: null,
 			acknowledgedBy: null,
 			cancelledBy: null
 		};
-		const id = await this.apiService.lease.create(lease);
-		this._leaseId = id;
-		this.model.acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/require`;
+		const id = await this.apiService.lease.create(this._lease);
+		this._lease.id = id;
+		this.model.await_req = true;
+		// this.model.acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/require`;
+		this.model.acknowledgeUrl = id;
 		this._timerPolling = this.startPollingLeaseState();
 		this._timerExpiring = this.startPollingExpired();
+	}
+
+	shouldShowQrCode(): boolean {
+		return this._lease !== null && !this.expires() && this._lease.requiredBy === null && this.model.acknowledgeUrl !== null;
+	}
+
+	shouldShowAck(): boolean {
+		return this._lease !== null && !this.expires() && this._lease.requiredBy !== null;
+	}
+
+	expires(): boolean {
+		return moment(this._lease.expire_at) <= moment();
 	}
 
 	async openModal(content: any) {
@@ -75,25 +91,24 @@ export class PatientDashboardComponent implements OnInit {
 		});
 	}
 
+	async approve() {
+		this._lease = await this.apiService.lease.acknowledge(this._lease.id, this.contextService.context.user);
+		this._modalRef.close();
+	}
+
 	private startPollingExpired(): NodeJS.Timer {
 		const now = moment();
 		const then = moment(this.model.expire_at);
-		console.log('now', now.toDate());
-		console.log('then', then.toDate());
 		const expireInMs = then.diff(now, 'milliseconds');
-		console.log('>>>', expireInMs);
 		return setTimeout(() => {
 			this.cancelLease();
 		}, expireInMs);
 	}
 
 	private startPollingLeaseState(): NodeJS.Timer {
-		this.required = false;
 		let timer = setInterval(async () => {
-			const lease = await this.apiService.lease.get(this._leaseId);
-			if(lease.requiredBy) {
-				this.required = true;
-				this._modalRef.close();
+			this._lease = await this.apiService.lease.get(this._lease.id);
+			if(this._lease.requiredBy) {
 				clearInterval(timer);
 			}
 		}, 500);
@@ -103,8 +118,7 @@ export class PatientDashboardComponent implements OnInit {
 	async cancelLease() {
 		this.model.acknowledgeUrl = null;
 		const user = this.contextService.context.user;
-		await this.apiService.lease.cancel(this._leaseId, user);
-		this.required = false;
+		await this.apiService.lease.cancel(this._lease.id, user);
 		clearInterval(this._timerPolling);
 		clearTimeout(this._timerExpiring);
 	}

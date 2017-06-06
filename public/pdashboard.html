@@ -10,8 +10,16 @@
 		</div>
 		<div class="modal-body" *ngIf="!acknowledgeUrl">
 			<div class="mx-auto" style="width: 200px;">
-				<qr-code [value]="model.acknowledgeUrl" size="200" *ngIf="model.acknowledgeUrl"></qr-code>
-				<p *ngIf="!model.acknowledgeUrl">{{model.acknowledgeUrl || 'Loading QR code'}}</p>
+				<div *ngIf="shouldShowQrCode()">
+					<qr-code [value]="model.acknowledgeUrl" size="200" *ngIf="model.acknowledgeUrl"></qr-code>
+					<p *ngIf="!model.acknowledgeUrl">{{model.acknowledgeUrl || 'Loading QR code'}}</p>
+				</div>
+				<div *ngIf="shouldShowAck()">
+					<button class="btn btn-success" (click)="approve()">Share Health Records</button>
+				</div>
+				<div *ngIf="expires()">
+					<p>{{'The lease has expired.'}}</p>
+				</div>
 			</div>
 			<p class="text-center">Will expire at <u>{{model.expire_at | date:'medium'}}</u></p>
 		</div>

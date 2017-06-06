@@ -40,9 +40,16 @@ export class DoctorDashboardComponent implements OnInit {
 	}
 
 	decodedOutput(value: string){
+		console.log('scanned value', value);
+		if(!value) {
+			return;
+		}
+
 		this.acknowledgeUrl = value;
 		if(this._modalRef) {
 			this._modalRef.close();
 		}
+		const leaseId = value;
+		this.apiService.lease.require(leaseId, this.contextService.context.user);
 	}
 }
