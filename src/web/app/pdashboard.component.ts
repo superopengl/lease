@@ -1,13 +1,12 @@
 import {
 	Component,
 	OnInit,
-	ApplicationRef
 } from '@angular/core';
 import { ContextService } from "./context.service";
 import { Patient, Lease } from "../../data/dtos";
 import { ApiService } from "./api.service";
 import * as moment from "moment";
-import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 interface Model {
 	expire_at: Date;
@@ -28,7 +27,6 @@ export class PatientDashboardComponent implements OnInit {
 			});
 	}
 
-	mlogs: any[];
 	patient: Patient;
 	leaseId: string;
 	_leaseId: string;
@@ -49,7 +47,7 @@ export class PatientDashboardComponent implements OnInit {
 		return this.patient ? this.patient.bio_info.last_name : '';
 	}
 
-	constructor(private apiService: ApiService, private contextService: ContextService, private modalService: NgbModal, private appRef: ApplicationRef){}
+	constructor(private apiService: ApiService, private contextService: ContextService, private modalService: NgbModal){}
 
 	async createLease() {
 		this.model.expire_at = moment().add(2, 'hours').toDate();
@@ -63,9 +61,8 @@ export class PatientDashboardComponent implements OnInit {
 		const id = await this.apiService.lease.create(lease);
 		this._leaseId = id;
 		this.model.acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/require`;
-		//this.appRef.tick();
 		this._timerPolling = this.startPollingLeaseState();
-		// this._timerExpiring = this.startPollingExpired();
+		this._timerExpiring = this.startPollingExpired();
 	}
 
 	async openModal(content: any) {
@@ -79,9 +76,11 @@ export class PatientDashboardComponent implements OnInit {
 	}
 
 	private startPollingExpired(): NodeJS.Timer {
-		const now = moment(new Date());
+		const now = moment();
 		const then = moment(this.model.expire_at);
-		const expireInMs = moment.duration(now.diff(then)).milliseconds();
+		console.log('now', now.toDate());
+		console.log('then', then.toDate());
+		const expireInMs = then.diff(now, 'milliseconds');
 		console.log('>>>', expireInMs);
 		return setTimeout(() => {
 			this.cancelLease();
@@ -90,15 +89,13 @@ export class PatientDashboardComponent implements OnInit {
 
 	private startPollingLeaseState(): NodeJS.Timer {
 		this.required = false;
-		let timer = setInterval(() => {
-			this.model.expire_at = moment().add(2, 'hours').toDate();
-			this.apiService.lease.get(this._leaseId).then(lease => {
-				if(lease.requiredBy) {
-					this.required = true;
-					clearInterval(timer);
-				}
-			});
-			console.log('polling');
+		let timer = setInterval(async () => {
+			const lease = await this.apiService.lease.get(this._leaseId);
+			if(lease.requiredBy) {
+				this.required = true;
+				this._modalRef.close();
+				clearInterval(timer);
+			}
 		}, 500);
 		return timer;
 	}
