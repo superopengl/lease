@@ -8,6 +8,8 @@ import UserRouter from "./routes/UserRouter";
 import AuthRouter from "./routes/AuthRouter";
 import MediOrderRouter from "./routes/MediOrderRouter";
 import ApiRouter from "./routes/ApiRouter";
+import * as nocache from "nocache";
+
 // Creates and configures an ExpressJS web server.
 class App {
 
@@ -29,6 +31,7 @@ class App {
 		this.express.use(bodyParser.urlencoded({
 			extended: false
 		}));
+		this.express.use(nocache());
 	}
 
 	// Configure API endpoints.
