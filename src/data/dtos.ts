@@ -85,6 +85,7 @@ export class MediOrder {
 	patientUserId: string;
 	timestamp?: Date;
 	doctorUserId: string;
+	place?: string;
 	content: string;
 }
 

@@ -1,0 +1,14 @@
+<div class="container">
+	<bfg-form [options]='modelSchema' [(value)]='model' #regForm>
+		<bfg-before>
+			<legend>Medical order form</legend>
+		</bfg-before>
+		<bfg-after>
+			<button type="button" class="btn btn-primary" (click)='save()'>Save</button>
+			<button type="button" class="btn btn-secondary" (click)='reset()'>Reset</button>
+		</bfg-after>
+	</bfg-form>
+
+	<pre>{{model | json}}</pre>
+	<pre>{{leaseId | json}}</pre>
+</div>

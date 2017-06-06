@@ -19,4 +19,11 @@
 	</ng-template>
 
 	<button class="btn btn-primary" (click)="openAquireLeaseModal(content)">Aquire Patient Health Records</button>
+	<p *ngIf="!model.canInput">Awaiting patient's approval</p>
+	<div *ngIf="model.canInput">
+		<meco-mediorder-input [leaseId]="model.leaseId" ></meco-mediorder-input>
+	</div>
+
+	<pre>For debug {{model | json}}</pre>
+
 </div>

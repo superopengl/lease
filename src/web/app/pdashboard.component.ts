@@ -32,6 +32,7 @@ export class PatientDashboardComponent implements OnInit {
 	_timerPolling: NodeJS.Timer;
 	_timerExpiring: NodeJS.Timer;
 	_lease: Lease;
+	_approved: boolean;
 
 	model: Model = {
 		expire_at: null,
@@ -58,6 +59,7 @@ export class PatientDashboardComponent implements OnInit {
 		};
 		const id = await this.apiService.lease.create(this._lease);
 		this._lease.id = id;
+		this._approved = false;
 		// this.model.acknowledgeUrl = `${this.apiService.restApiBaseUrl}lease/${id}/require`;
 		this.model.acknowledgeUrl = id;
 		this._timerPolling = this.startPollingLeaseState();
@@ -88,6 +90,7 @@ export class PatientDashboardComponent implements OnInit {
 
 	async approve() {
 		this._lease = await this.apiService.lease.acknowledge(this._lease.id, this.contextService.context.user);
+		this._approved = true;
 		this._modalRef.close();
 	}
 
@@ -111,9 +114,11 @@ export class PatientDashboardComponent implements OnInit {
 	}
 
 	async cancelLease() {
-		this.model.acknowledgeUrl = null;
-		const user = this.contextService.context.user;
-		await this.apiService.lease.cancel(this._lease.id, user);
+		if(!this._approved){
+			this.model.acknowledgeUrl = null;
+			const user = this.contextService.context.user;
+			await this.apiService.lease.cancel(this._lease.id, user);
+		}
 		clearInterval(this._timerPolling);
 		clearTimeout(this._timerExpiring);
 	}

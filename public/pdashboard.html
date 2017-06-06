@@ -13,6 +13,7 @@
 				<div *ngIf="shouldShowQrCode()">
 					<qr-code [value]="model.acknowledgeUrl" size="200" *ngIf="model.acknowledgeUrl"></qr-code>
 					<p *ngIf="!model.acknowledgeUrl">{{model.acknowledgeUrl || 'Loading QR code'}}</p>
+					<p class="text-center">Will expire at <u>{{model.expire_at | date:'medium'}}</u></p>
 				</div>
 				<div *ngIf="shouldShowAck()">
 					<button class="btn btn-success" (click)="approve()">Share Health Records</button>
@@ -21,7 +22,6 @@
 					<p>{{'The lease has expired.'}}</p>
 				</div>
 			</div>
-			<p class="text-center">Will expire at <u>{{model.expire_at | date:'medium'}}</u></p>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
@@ -30,6 +30,5 @@
 
 	<button class="btn btn-primary" (click)="openModal(content)">Share Health Records</button>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-	<pre>{{model | json}}</pre>
+
 </div>
