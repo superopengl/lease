@@ -24,7 +24,7 @@ export class LeaseRouter {
 			const user = <User>req.body;
 			let lease = <Lease> (await this.api.get(leaseId));
 			if(lease.cancelledBy){
-				res.send(404, 'The lease has been cancelled');
+				res.send(400, 'The lease has been cancelled');
 			}
 			lease.requiredBy = user.id;
 			lease = await this.api.update(lease);
@@ -34,15 +34,37 @@ export class LeaseRouter {
 		}
 	}
 
-	public async acknowledge(req: Request, res: Response, next: NextFunction) {
+	public async approve(req: Request, res: Response, next: NextFunction) {
 		const leaseId = req.params.id;
 		try{
 			const user = <User>req.body;
 			let lease = <Lease> (await this.api.get(leaseId));
 			if(lease.cancelledBy){
-				res.send(404, 'The lease has been cancelled');
+				res.send(400, 'The lease has been cancelled');
 			}
-			lease.acknowledgedBy = user.id;
+			if(lease.rejectedBy){
+				res.send(400, 'The lease has been rejected');
+			}
+			lease.approvedBy = user.id;
+			lease = await this.api.update(lease);
+			res.send(200, lease);
+		}catch(err){
+			res.send(500, err);
+		}
+	}
+
+	public async reject(req: Request, res: Response, next: NextFunction) {
+		const leaseId = req.params.id;
+		try{
+			const user = <User>req.body;
+			let lease = <Lease> (await this.api.get(leaseId));
+			if(lease.cancelledBy){
+				res.send(400, 'The lease has been cancelled');
+			}
+			if(lease.approvedBy){
+				res.send(400, 'The lease has been approved');
+			}
+			lease.rejectedBy = user.id;
 			lease = await this.api.update(lease);
 			res.send(200, lease);
 		}catch(err){
@@ -68,7 +90,7 @@ export class LeaseRouter {
 	 */
 	init() {
 		this.router.post('/:id/require', this.require);
-		this.router.post('/:id/acknowledge', this.acknowledge);
+		this.router.post('/:id/acknowledge', this.approve);
 		this.router.post('/:id/cancel', this.cancel);
 	}
 }

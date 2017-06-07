@@ -39,9 +39,9 @@ export interface Mlog {
 export interface Lease {
 	id?: string;
 	expire_at: Date;
-	state: string;
 	requiredBy: string;
-	acknowledgedBy: string;
+	approvedBy: string;
+	rejectedBy: string;
 	cancelledBy: string;	
 }
 

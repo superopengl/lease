@@ -64,7 +64,7 @@ export class MediOrderInputComponent implements OnInit, OnChanges {
 		if(lease.requiredBy !== this.contextService.context.user.id) {
 			throw new Error(`The lease isn't required by the current user`);
 		}
-		if(!lease.acknowledgedBy){
+		if(!lease.approvedBy){
 			throw new Error(`The lease hasn't been acknowledged by the record's owner`);
 		}
 	}
@@ -75,7 +75,7 @@ export class MediOrderInputComponent implements OnInit, OnChanges {
 		}
 		this.model.timestamp = new Date();
 		this.model.doctorUserId = this._lease.requiredBy;
-		this.model.patientUserId = this._lease.acknowledgedBy;
+		this.model.patientUserId = this._lease.approvedBy;
 		this.model.place = 'VR clinic';
 		await this.apiService.mediOrder.create(this.model);
 		this.reset();

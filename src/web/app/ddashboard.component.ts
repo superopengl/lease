@@ -15,19 +15,20 @@ import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-boo
 export class DoctorDashboardComponent implements OnInit {
 	ngOnInit(): void {
 		console.log(this.contextService.context);
-		const userId = this.contextService.context.user.id;
-		this.apiService.doctor.findOne({user_id: userId})
-			.then(d => {
-				this.doctor = d;
-			});
+		this.model.userId = this.contextService.context.user.id;
 	}
-	doctor: Doctor;
+	userId: string;
 	acknowledgeUrl: string;
 	_expireAt: Date;
 	_modalRef: NgbModalRef;
-	model: any = {
+	model: {
+		canInput: boolean;
+		leaseId: string;
+		userId: string;
+	} = {
 		canInput: false,
-		leaseId: null
+		leaseId: null,
+		userId: null
 	}
 	_timerPolling: number;
 
@@ -54,7 +55,7 @@ export class DoctorDashboardComponent implements OnInit {
 
 		this.acknowledgeUrl = value;
 		const leaseId = value;
-		this.apiService.lease.require(leaseId, this.contextService.context.user);
+		this.apiService.lease.require(leaseId, this.contextService.context.user.id);
 		this._modalRef.close();
 		this.pollingLeaseApproval(leaseId);
 	}
@@ -65,10 +66,14 @@ export class DoctorDashboardComponent implements OnInit {
 
 	private async pollingCallback(leaseId: string) {
 		const lease = await this.apiService.lease.get(leaseId);
-		if(lease.acknowledgedBy) {
+		if(lease.approvedBy) {
 			this.model.canInput = true;
 			this.model.leaseId = lease.id;
 			clearInterval(this._timerPolling);
 		}
+	}
+
+	onEstablish(leaseId){
+		alert(leaseId);
 	}
 }

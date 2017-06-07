@@ -74,7 +74,7 @@ export class ApiRouter {
 		try {
 			await ApiRouter.getApi(req).update(item);
 
-			res.status(200).end('Updated');
+			res.status(200).send(item);
 		} catch (error) {
 			ApiRouter.server500(error, res);
 		}

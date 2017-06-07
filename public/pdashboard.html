@@ -1,34 +1,5 @@
 <div class="container">
 	<h2>Patient Dashboad - {{first_name}} {{last_name}}</h2>
 
-	<ng-template #content let-c="close" let-d="dismiss">
-		<div class="modal-header">
-			<h4 class="modal-title">Scan to share health record</h4>
-			<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="modal-body" *ngIf="!acknowledgeUrl">
-			<div class="mx-auto" style="width: 200px;">
-				<div *ngIf="shouldShowQrCode()">
-					<qr-code [value]="model.acknowledgeUrl" size="200" *ngIf="model.acknowledgeUrl"></qr-code>
-					<p *ngIf="!model.acknowledgeUrl">{{model.acknowledgeUrl || 'Loading QR code'}}</p>
-					<p class="text-center">Will expire at <u>{{model.expire_at | date:'medium'}}</u></p>
-				</div>
-				<div *ngIf="shouldShowAck()">
-					<button class="btn btn-success" (click)="approve()">Share Health Records</button>
-				</div>
-				<div *ngIf="expires()">
-					<p>{{'The lease has expired.'}}</p>
-				</div>
-			</div>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
-		</div>
-	</ng-template>
-
-	<button class="btn btn-primary" (click)="openModal(content)">Share Health Records</button>
-
-
+	<meco-lease-owner [userId]="model.userId" (onEstablish)="onEstablish($event)"></meco-lease-owner>
 </div>

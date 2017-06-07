@@ -1,29 +1,5 @@
 <div class="container">
 	<h2>Doctor Dashboad - {{first_name}} {{last_name}}</h2>
 
-	<pre>{{acknowledgeUrl || 'Not scanned'}}</pre>
-
-	<ng-template #content let-c="close" let-d="dismiss">
-		<div class="modal-header">
-			<h4 class="modal-title">Scan to share health record</h4>
-			<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="modal-body" *ngIf="!acknowledgeUrl">
-			<qr-scanner [debug]="false" [canvasWidth]="640" [canvasHeight]="480" [mirror]="false" [stopAfterScan]="true" [updateTime]="100" (onRead)="decodedOutput($event)"></qr-scanner>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
-		</div>
-	</ng-template>
-
-	<button class="btn btn-primary" (click)="openAquireLeaseModal(content)">Aquire Patient Health Records</button>
-	<p *ngIf="!model.canInput">Awaiting patient's approval</p>
-	<div *ngIf="model.canInput">
-		<meco-mediorder-input [leaseId]="model.leaseId" ></meco-mediorder-input>
-	</div>
-
-	<pre>For debug {{model | json}}</pre>
-
+	<meco-lease-guest [userId]="model.userId" (onEstablish)="onEstablish($event)"></meco-lease-guest>
 </div>

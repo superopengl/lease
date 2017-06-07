@@ -55,7 +55,7 @@ class RestApi < T > implements IRestApi < T > {
 	}
 
 	async get(id: string): Promise < T > {
-		const url = this.baseUrl + '/' + id;
+		const url = this.baseUrl + '/' + id;		
 		const response = await this.http.get(url).toPromise();
 		this.AssertResponse(response);
 		const item = response.json();
@@ -109,42 +109,51 @@ class LeaseApi extends RestApi<Lease> {
 		if(!lease) {
 			throw new Error('Cannot find lease');
 		}
-		if(lease.cancelledBy){
-			throw new Error('The lease has been cancelled');
-		}
 		if(lease.expire_at < moment.utc().toDate()) {
 			throw new Error('The lease has expired');
 		}
 		return lease;
 	}
 
-	async require(leaseId: string, user: User): Promise<Lease>{
+	async require(leaseId: string, userId: string): Promise<Lease>{
 		const lease = await this.getLease(leaseId);
 		if(lease.requiredBy){
 			throw new Error('The lease has been required');	
 		}
-		lease.requiredBy = user.id;
+		lease.requiredBy = userId;
 		return this.update(lease);
 	}
 
-	async acknowledge(leaseId: string, user: User): Promise<Lease>{
+	async approve(leaseId: string, userId: string): Promise<Lease>{
 		const lease = await this.getLease(leaseId);
 		if(!lease.requiredBy){
 			throw new Error(`The lease hasn't been required`);	
 		}
-		if(lease.acknowledgedBy){
+		if(lease.approvedBy){
 			throw new Error('The lease has been acknowledged');	
 		}
-		lease.acknowledgedBy = user.id;
+		lease.approvedBy = userId;
 		return this.update(lease);
 	}
 
-	async cancel(leaseId: string, user: User): Promise<Lease>{
+	async reject(leaseId: string, userId: string): Promise<Lease>{
 		const lease = await this.getLease(leaseId);
 		if(lease.cancelledBy){
 			throw new Error('The lease has been cancelled');	
 		}
-		lease.cancelledBy = user.id;
+		if(lease.rejectedBy){
+			throw new Error('The lease has been rejected');	
+		}
+		lease.rejectedBy = userId;
+		return this.update(lease);
+	}
+
+	async cancel(leaseId: string, userId: string): Promise<Lease>{
+		const lease = await this.getLease(leaseId);
+		if(lease.cancelledBy){
+			throw new Error('The lease has been cancelled');	
+		}
+		lease.cancelledBy = userId;
 		return this.update(lease);
 	}
 }

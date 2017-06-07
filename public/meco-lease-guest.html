@@ -1,0 +1,14 @@
+<div class="d-block container">
+	<div *ngIf="model.statusMessage" class="alert alert-info text-center" role="alert">
+		{{model.statusMessage}}
+	</div>
+	<div *ngIf="model.showsCamera" class="mx-auto" style="width: 480px;">
+		<qr-scanner [debug]="false" [canvasWidth]="480" [canvasHeight]="480" 
+		[mirror]="false" [stopAfterScan]="false" [updateTime]="100" 
+		(onRead)="onCapture($event)"></qr-scanner>
+	</div>
+	<div class="text-center">
+		<button *ngIf="model.showsWelcome" type="button" class="btn btn-primary" (click)="startScan()">Scan QR code</button>
+		<button *ngIf="!model.showsWelcome" type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+<div class="d-block container">
+	<div *ngIf="model.statusMessage" class="alert alert-info text-center" role="alert">
+		{{model.statusMessage}}
+	</div>
+
+	<div *ngIf="model.showsQrCode" class="text-center">
+		<qr-code [value]="lease.id" size="200" *ngIf="lease.id"></qr-code>
+		<p *ngIf="!lease.id">{{lease.id || 'Loading QR code'}}</p>
+		<p class="text-center">Will expire at <u>{{lease.expire_at | date:'medium'}}</u></p>
+	</div>
+	<div class="text-center">
+		<button *ngIf="model.showsWelcome" type="button" class="btn btn-primary" (click)="create()">Generate QR code</button>
+		<button *ngIf="model.showsApproveOrReject" type="button" class="btn btn-success" (click)="approve()">Approve</button>
+		<button *ngIf="model.showsApproveOrReject" type="button" class="btn btn-danger" (click)="reject()">Reject</button>
+		<button *ngIf="!model.showsWelcome" type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+	</div>
+</div>

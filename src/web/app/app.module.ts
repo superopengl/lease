@@ -19,6 +19,7 @@ import { QrScannerModule } from "angular2-qrscanner";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapFormGeneratorModule } from 'ng-bootstrap-form-generator';
 import {MediOrderInputComponent} from './mediOrderInput.component';
+import { LeaseWorkflowOwnerComponent, LeaseWorkflowGuestComponent } from "./leaseWorkflow.component";
 
 const appRoutes: Routes = [
 	{ path: '', component: SignInComponent },
@@ -32,7 +33,7 @@ const appRoutes: Routes = [
 @NgModule({
 	imports: [ BootstrapFormGeneratorModule, RouterModule.forRoot(appRoutes), BrowserModule, FormsModule, HttpModule, QRCodeModule, QrScannerModule, NgbModule.forRoot()],
 	providers: [SignInUpService, ContextService, CookieService, ApiService, NotificationService],
-	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent, PatientDashboardComponent, DoctorDashboardComponent, MediOrderInputComponent],
+	declarations: [ SignInComponent, MainComponent, NotificationComponent, RoleSignupComponent, PatientDashboardComponent, DoctorDashboardComponent, MediOrderInputComponent, LeaseWorkflowOwnerComponent, LeaseWorkflowGuestComponent],
 	bootstrap: [ MainComponent ]
 })
 export class AppModule { }
