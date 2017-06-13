@@ -91,6 +91,7 @@ export class LeaseRouter {
 	init() {
 		this.router.post('/:id/require', this.require);
 		this.router.post('/:id/acknowledge', this.approve);
+		this.router.post('/:id/reject', this.reject);
 		this.router.post('/:id/cancel', this.cancel);
 	}
 }

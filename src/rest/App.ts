@@ -4,10 +4,8 @@ import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from "cors";
 import LeaseRouter from './routes/LeaseRouter';
-import UserRouter from "./routes/UserRouter";
 import AuthRouter from "./routes/AuthRouter";
-import MediOrderRouter from "./routes/MediOrderRouter";
-import ApiRouter from "./routes/ApiRouter";
+import GenericApiRouter from "./routes/ApiRouter";
 import * as nocache from "nocache";
 
 // Creates and configures an ExpressJS web server.
@@ -49,9 +47,7 @@ class App {
 		this.express.use('/', router);
 		this.express.use('/api/v1/auth', AuthRouter);
 		this.express.use('/api/v1/lease', LeaseRouter);
-		this.express.use('/api/v1', ApiRouter);
-		this.express.use('/api/v1/user', UserRouter);
-		this.express.use('/api/v1/order', MediOrderRouter);
+		this.express.use('/api/v1', GenericApiRouter);
 	}
 
 }
