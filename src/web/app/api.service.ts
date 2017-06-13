@@ -9,7 +9,7 @@ import {
 import {MediOrder, Lease,  Patient,   User,    Doctor} from '../../data/dtos';
 import * as moment from "moment";
 
-const REST_API_BASE_URL: string = "http://localhost:8141/api/v1/";
+const REST_API_BASE_URL: string = "http://192.168.10.185:8141/api/v1/";
 
 export interface IRestApi < T > {
 	list(limit ? : number, sort ? : any): Promise < T[] > ;

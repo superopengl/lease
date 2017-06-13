@@ -72,7 +72,12 @@ export class ApiRouter {
 	public async updateOne(req: Request, res: Response, next: NextFunction) {
 		let item = req.body;
 		try {
-			await ApiRouter.getApi(req).update(item);
+			const updateWhole = req.query && req.query.whole;
+			if(!!updateWhole) {
+				await ApiRouter.getApi(req).update(item);
+			} else {
+				await ApiRouter.getApi(req).merge(item.id, item);
+			}
 
 			res.status(200).send(item);
 		} catch (error) {

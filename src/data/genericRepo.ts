@@ -8,6 +8,7 @@ export interface IGenericRepo {
 	query(query: any, limit ? : number, sort ? : any): Promise < any[] > ;
 	create(item: any): Promise < string > ;
 	update(item: any): Promise < any > ;
+	merge(id:string, delta: any): Promise<void>;
 	delete(id: string): Promise < void > ;
 }
 
@@ -56,6 +57,18 @@ class GenericRepo implements IGenericRepo {
 		}
 		const updated = await this.upsert(item, false);
 		return updated;
+	}
+
+	async merge(id:string, delta: any): Promise<void>{
+		const collection = await this.getCollection();
+		const option: mongo.ReplaceOneOptions = {
+			upsert: false
+		};
+		delete delta['_id'];
+		const result = await collection.updateOne({id}, {$set: delta}, option);
+		if(result.modifiedCount === 0){
+			throw new Error(`Cannot merge because target object doesn't exist (id:${id})`);
+		}
 	}
 
 	private async upsert(item: any, upsert: boolean): Promise < any > {
